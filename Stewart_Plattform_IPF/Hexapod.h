@@ -19,11 +19,19 @@ class Hexapod {
 
 public:
 
-	Hexapod(float,float,float,float,float,float,float,float,int,int,int,int,int,int);
+	Hexapod(float,float,int,int,int,int,int,int);
 
 	virtual ~Hexapod();
 
-	void verfahren(float, float, float, float, float,float);
+	void AnkerSetzenObenX(float,float,float,float,float,float);
+
+	void AnkerSetzenObenY(float,float,float,float,float,float);
+
+	void AnkerSetzenUntenX(float,float,float,float,float,float);
+
+	void AnkerSetzenUntenY(float,float,float,float,float,float);
+
+	void verfahren(float,float,float,float,float,float);
 
 private:
 

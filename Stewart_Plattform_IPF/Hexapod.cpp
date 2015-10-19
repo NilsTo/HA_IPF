@@ -6,18 +6,9 @@
  */
 #include "Hexapod.h"
 
-Hexapod::Hexapod(float x_u, float y_u, float z_u, float x_o, float y_o,
-		float z_o, float LOA, float LUA, int W1, int W2, int W3, int W4, int W5,
+Hexapod::Hexapod(float LOA, float LUA, int W1, int W2, int W3, int W4, int W5,
 		int W6) {
 	for (int i = 0; i < 6; i++) {
-		//Vektor des unteren Befestigungspunkts
-		arme[i].AnkerUnten.x = x_u;
-		arme[i].AnkerUnten.y = y_u;
-		arme[i].AnkerUnten.z = z_u;
-		//Vektor des oberen Befestigungspunktes
-		arme[i].AnkerOben.x = x_o;
-		arme[i].AnkerOben.x = x_o;
-		arme[i].AnkerOben.x = x_o;
 		//Definieren der Laengen
 		arme[i].LaengeOberarm = LOA;
 		arme[i].LaengeUnterarm = LUA;
@@ -48,6 +39,23 @@ Hexapod::Hexapod(float x_u, float y_u, float z_u, float x_o, float y_o,
 Hexapod::~Hexapod() {
 	// TODO Auto-generated destructor stub
 }
+void Hexapod::AnkerSetzenObenX(){
+
+}
+
+void Hexapod::AnkerSetzenObenY()){
+
+}
+
+void Hexapod::AnkerSetzenUntenX(){
+
+}
+
+void Hexapod::AnkerSetzenUntenY(){
+
+}
+
+
 /*
  * Methode berechnet den Vektor aus Rotationsmatrix u. Vektor des oberen Ankerpunktes.
  */
@@ -63,8 +71,10 @@ Vector Hexapod::calcRotMatrix(Vector b, float yaw, float pitch, float roll) {
 			+ cos(pitch) * cos(roll) * b.z;
 	return c;
 }
-
-Hexapod::verfahren(float xx, float yy, float zz, float yawAngel,
+/*
+ * Ermöglicht das Verfahren der oberen Plattform in anzugebene kartesische Koordinaten und die dazugehörigen Eulerwinkel
+ */
+void Hexapod::verfahren(float xx, float yy, float zz, float yawAngel,
 		float pitchAngel, float rollAngel) {
 	//Ortsvektor der Zielkoordinaten
 	Vector ziel;
@@ -92,7 +102,8 @@ Hexapod::verfahren(float xx, float yy, float zz, float yawAngel,
 						+ sin(arme[i].WinkelAusrichtung)
 								* (arme[i].AnkerOben.y - arme[i].AnkerUnten.y));
 		//Berechnen des Winkels
-		arme[i].dynWinkel = asin(L/sqrt(M*M+N*N)) - atan(N/M);
+		arme[i].dynWinkel = (asin(L / sqrt(M * M + N * N)) - atan(N / M))
+				* RAD2DEG;
 	}
 	// TODO Verfahren der Servos an Position
 }
