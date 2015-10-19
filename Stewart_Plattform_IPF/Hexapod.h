@@ -36,6 +36,8 @@ private:
 		float LaengeOberarm;
 		float LaengeUnterarm;
 		int WinkelAusrichtung;
+		float dynLaenge;
+		float dynWinkel;
 	};
 
 	arm arme[6];
