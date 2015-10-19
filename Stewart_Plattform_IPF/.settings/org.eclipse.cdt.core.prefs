@@ -269,6 +269,9 @@ environment/project/it.baeyens.arduino.core.toolChain.release.2082737971/A.RUNTI
 environment/project/it.baeyens.arduino.core.toolChain.release.2082737971/A.RUNTIME.IDE.VERSION/delimiter=;
 environment/project/it.baeyens.arduino.core.toolChain.release.2082737971/A.RUNTIME.IDE.VERSION/operation=replace
 environment/project/it.baeyens.arduino.core.toolChain.release.2082737971/A.RUNTIME.IDE.VERSION/value=165-r5
+environment/project/it.baeyens.arduino.core.toolChain.release.2082737971/A.RUNTIME.TOOLS.AVR-GCC.PATH/delimiter=;
+environment/project/it.baeyens.arduino.core.toolChain.release.2082737971/A.RUNTIME.TOOLS.AVR-GCC.PATH/operation=append
+environment/project/it.baeyens.arduino.core.toolChain.release.2082737971/A.RUNTIME.TOOLS.AVR-GCC.PATH/value=${A.RUNTIME.HARDWARE.PATH}/tools/avr
 environment/project/it.baeyens.arduino.core.toolChain.release.2082737971/A.SOFTWARE/delimiter=;
 environment/project/it.baeyens.arduino.core.toolChain.release.2082737971/A.SOFTWARE/operation=replace
 environment/project/it.baeyens.arduino.core.toolChain.release.2082737971/A.SOFTWARE/value=ARDUINO
@@ -317,6 +320,9 @@ environment/project/it.baeyens.arduino.core.toolChain.release.2082737971/A.TOOLS
 environment/project/it.baeyens.arduino.core.toolChain.release.2082737971/A.TOOLS.AVRDUDE.UPLOAD.PATTERN/delimiter=;
 environment/project/it.baeyens.arduino.core.toolChain.release.2082737971/A.TOOLS.AVRDUDE.UPLOAD.PATTERN/operation=replace
 environment/project/it.baeyens.arduino.core.toolChain.release.2082737971/A.TOOLS.AVRDUDE.UPLOAD.PATTERN/value="${A.CMD.PATH}" "-C${A.CONFIG.PATH}" ${A.UPLOAD.VERBOSE} -p${A.BUILD.MCU} -c${A.UPLOAD.PROTOCOL} -P${A.SERIAL.PORT} -b${A.UPLOAD.SPEED} -D "-Uflash\:w\:${A.BUILD.PATH}/${A.BUILD.PROJECT_NAME}.hex\:i"
+environment/project/it.baeyens.arduino.core.toolChain.release.2082737971/A.TOOLS.BOSSAC.PATH/delimiter=;
+environment/project/it.baeyens.arduino.core.toolChain.release.2082737971/A.TOOLS.BOSSAC.PATH/operation=append
+environment/project/it.baeyens.arduino.core.toolChain.release.2082737971/A.TOOLS.BOSSAC.PATH/value=${A.RUNTIME.HARDWARE.PATH}/tools/avr
 environment/project/it.baeyens.arduino.core.toolChain.release.2082737971/A.UPLOAD.MAXIMUM_DATA_SIZE/delimiter=;
 environment/project/it.baeyens.arduino.core.toolChain.release.2082737971/A.UPLOAD.MAXIMUM_DATA_SIZE/operation=replace
 environment/project/it.baeyens.arduino.core.toolChain.release.2082737971/A.UPLOAD.MAXIMUM_DATA_SIZE/value=8192
