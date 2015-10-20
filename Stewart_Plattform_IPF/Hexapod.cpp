@@ -23,7 +23,7 @@ Hexapod::Hexapod(float LOA, float LUA,float ankerUX[6], float ankerUY[6], float 
 		arme[i].AnkerUnten.y = ankerUY[i];
 		arme[i].AnkerUnten.z = ankerUZ[i];
 		//Lagewinkel definieren
-		arme[i].WinkelAusrichtung = winkel[i];
+		arme[i].WinkelAusrichtung = (winkel[i] * DEG2RAD);
 		//Definieren der Servovariabeln
 		arme[i].aktor.setPins(analog[i], pwm[i]);
 		arme[i].aktor.setAngles(waagerecht[i], senkrecht[i]);
@@ -80,6 +80,8 @@ float Hexapod::calcHomeWinkel(int winkel) {
  */
 void Hexapod::verfahren(float xx, float yy, float zz, float yawAngle,
 		float pitchAngle, float rollAngle) {
+	Serial.print("Eingabe: ");
+	Serial.println(zz);
 //Ortsvektor der Zielkoordinaten
 	Vector ziel;
 	ziel.x = xx;
@@ -93,40 +95,35 @@ void Hexapod::verfahren(float xx, float yy, float zz, float yawAngle,
 	for (int i = 0; i < 6; i++) {
 		Vector matrixErgebnis = calcRotMatrix(arme[i].AnkerOben, yAngle, pAngle,
 				rAngle);
-		Vector qErgebnis = ziel + matrixErgebnis;
-		Vector lErgebnis = ziel + matrixErgebnis - arme[i].AnkerUnten;
+		Vector hoehe;
+		hoehe.z = 115;
+		Vector qErgebnis = ziel + matrixErgebnis + hoehe;
+		Vector lErgebnis = qErgebnis - arme[i].AnkerUnten;
 		 arme[i].dynLaenge = lErgebnis.Length();
-		 Serial.print("Länge =");
+		 Serial.println("Länge =");
 		 Serial.print(arme[i].dynLaenge);
 		//Winkel - Hilfsgrößen
 		float L = (arme[i].dynLaenge * arme[i].dynLaenge)
 				- ((arme[i].LaengeUnterarm * arme[i].LaengeUnterarm)
 				- (arme[i].LaengeOberarm * arme[i].LaengeOberarm));
-		Serial.print("L =");
-		Serial.print(L);
 		float M = 2 * arme[i].LaengeOberarm
 				* (qErgebnis.z - arme[i].AnkerUnten.z);   //Änderung
-		Serial.print("M =");
-		Serial.print(M);
 		float N = 2 * arme[i].LaengeOberarm
 				* (cos(arme[i].WinkelAusrichtung)
 					* (qErgebnis.x - arme[i].AnkerUnten.x)  	//Änderung
 						+ sin(arme[i].WinkelAusrichtung)
 								* (qErgebnis.y - arme[i].AnkerUnten.y)); //Änderung
-		Serial.print("N =");
-		Serial.print(N);
 		//Berechnen des Winkels
-		float wurzel = sqrt((M * M) + (N * N));
-		Serial.print("wurzel =");
-		Serial.print(wurzel);
 		arme[i].dynWinkel = (asin(L / sqrt((M * M) + (N * N))) - atan2(N, M))
 				* RAD2DEG;
 		Serial.print("Winkel =");
 		Serial.print(arme[i].dynWinkel);
+
 	}
+	Serial.println("Ende");
 	for (int i = 0; i < 6; i++) {
-		int winkel = int(arme[i].dynWinkel) - int(homeWinkel);
-		arme[i].aktor.stelle(winkel);
+		//int winkel = int(arme[i].dynWinkel) - int(homeWinkel);
+		//arme[i].aktor.stelle(winkel);
 	}
 }
 
