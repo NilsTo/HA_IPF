@@ -7,12 +7,63 @@
 #ifndef HEXAPOD_H_
 #define HEXAPOD_H_
 
+#define DEG2RAD      (PI/180.0f)
+#define RAD2DEG      (180.0f/PI)
+
 #include "Arduino.h"
+#include "Vector.h"
+
 
 class Hexapod {
+
+
 public:
-	Hexapod();
+
+	Hexapod(float,float,int,int,int,int,int,int);
+
 	virtual ~Hexapod();
+
+	void AnkerSetzenObenX(float,float,float,float,float,float);
+
+	void AnkerSetzenObenY(float,float,float,float,float,float);
+
+	void AnkerSetzenObenZ(float,float,float,float,float,float);
+
+	void AnkerSetzenUntenX(float,float,float,float,float,float);
+
+	void AnkerSetzenUntenY(float,float,float,float,float,float);
+
+	void AnkerSetzenUntenZ(float,float,float,float,float,float);
+
+	void createSteller();
+
+	void goHome();
+
+	void verfahren(float,float,float,float,float,float);
+
+private:
+
+	/*
+	 * Dateityp Arm fuer die Spaetere Zusamenfassung geometrischer Merkmale.
+	 */
+	struct arm {
+		Vector AnkerUnten;
+		Vector AnkerOben;
+		float LaengeOberarm;
+		float LaengeUnterarm;
+		int WinkelAusrichtung;
+		float dynLaenge;
+		float dynWinkel;
+	};
+// Array zur Aufnahme der 6 Arme an einer Plattform
+	arm arme[6];
+
+	// TODO Hier noch neue Array von Klasse Steller hinzufuegen
+
+	Vector calcRotMatrix(Vector, float, float, float);
+
+
+
 };
 
 #endif /* HEXAPOD_H_ */
