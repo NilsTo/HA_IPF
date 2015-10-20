@@ -24,6 +24,7 @@ Hexapod::Hexapod(float ankerUX[6], float ankerUY[6], float ankerUZ[6],
 		//Definieren der Servovariabeln
 		arme[i].aktor.setPins(analog[i], pwm[i]);
 		arme[i].aktor.setAngles(waagerecht[i], senkrecht[i]);
+		//Berechnen des neutralen Winkels, mit dem 5 Servo, da dieser ein beta von 0 hat.
 		homeWinkel = calcHomeWinkel(4);
 	}
 }
@@ -67,7 +68,7 @@ float Hexapod::calcHomeWinkel(int winkel) {
 	float L0 = 2 * arme[winkel].LaengeOberarm * arme[winkel].LaengeOberarm;
 	float M0 = 2 * arme[winkel].LaengeOberarm * xOxU;
 	float N0 = 2 * arme[winkel].LaengeOberarm * (h0 + arme[winkel].AnkerOben.z);
-	float a0 = asin(L0/sqrt(M0*M0+N0*N0)) - atan2(M0, N0);
+	float a0 = (asin(L0/sqrt(M0*M0+N0*N0)) - atan2(M0, N0)) * RAD2DEG;
 	return a0;
 }
 
