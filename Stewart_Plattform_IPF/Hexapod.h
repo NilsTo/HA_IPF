@@ -46,7 +46,14 @@ private:
 // Array zur Aufnahme der 6 Arme an einer Plattform
 	arm arme[6];
 
+//Wert des neutralWinkels, wird im constructor berechnet
+	float homeWinkel;
+
 	Vector calcRotMatrix(Vector, float, float, float);
+	/*
+	 * Funktion, die den Normalwinkel berechnet, benötigt als int, bei welchem Servo beta=0
+	 */
+	float calcHomeWinkel(int);
 
 };
 
