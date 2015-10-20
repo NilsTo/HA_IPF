@@ -6,114 +6,33 @@
  */
 #include "Hexapod.h"
 
-Hexapod::Hexapod(float LOA, float LUA, int W1, int W2, int W3, int W4, int W5,
-		int W6) {
-	for (int i = 0; i < 6; i++) {
-		//Definieren der Laengen
-		arme[i].LaengeOberarm = LOA;
-		arme[i].LaengeUnterarm = LUA;
+Hexapod::Hexapod(float ankerUX[6], float ankerUY[6], float ankerUZ[6],
+		float ankerOX[6], float ankerOY[6], float ankerOZ[6], int winkel[6],
+		int pwm[6], int analog[6], int waagerecht[6], int senkrecht[6]){
+	//Geometrie der Arme definieren
+	for (int i = 0;i<6;i++) {
+		//Oberen Anker definieren
+		arme[i].AnkerOben.x = ankerOX[i];
+		arme[i].AnkerOben.y = ankerOY[i];
+		arme[i].AnkerOben.z = ankerOZ[i];
+		//Unteren Anker definieren
+		arme[i].AnkerUnten.x = ankerUX[i];
+		arme[i].AnkerUnten.y = ankerUY[i];
+		arme[i].AnkerUnten.z = ankerUZ[i];
+		//Lagewinkel definieren
+		arme[i].WinkelAusrichtung = winkel[i];
+		//Definieren der Servovariabeln
+		arme[i].aktor.setPins(analog[i],pwm[i]);
+		arme[i].aktor.setAngles(waagerecht[i],senkrecht[i]);
 	}
-		//Auswahl des korrekten Winkels
-			arme[0].WinkelAusrichtung = (W1 * DEG2RAD);
-			arme[1].WinkelAusrichtung = (W2 * DEG2RAD);
-			arme[2].WinkelAusrichtung = (W3 * DEG2RAD);
-			arme[3].WinkelAusrichtung = (W4 * DEG2RAD);
-			arme[4].WinkelAusrichtung = (W5 * DEG2RAD);
-			arme[5].WinkelAusrichtung = (W6 * DEG2RAD);
 }
 
 Hexapod::~Hexapod() {
 	// TODO Auto-generated destructor stub
 }
-void Hexapod::ankerSetzenObenX(float xo1, float xo2, float xo3, float xo4,
-		float xo5, float xo6) {
-			arme[0].AnkerOben.x = xo1;
-			arme[1].AnkerOben.x = xo2;
-			arme[2].AnkerOben.x = xo3;
-			arme[3].AnkerOben.x = xo4;
-			arme[4].AnkerOben.x = xo5;
-			arme[5].AnkerOben.x = xo6;
-}
-
-void Hexapod::ankerSetzenObenY(float yo1, float yo2, float yo3, float yo4,float yo5, float yo6) {
-			arme[0].AnkerOben.y = yo1;
-			arme[1].AnkerOben.y = yo2;
-			arme[2].AnkerOben.y = yo3;
-			arme[3].AnkerOben.y = yo4;
-			arme[4].AnkerOben.y = yo5;
-			arme[5].AnkerOben.y = yo6;
-}
-
-void Hexapod::ankerSetzenObenZ(float zo1, float zo2, float zo3, float zo4,
-		float zo5, float zo6) {
-			arme[0].AnkerOben.z = zo1;
-			arme[1].AnkerOben.z = zo2;
-			arme[2].AnkerOben.z = zo3;
-			arme[3].AnkerOben.z = zo4;
-			arme[4].AnkerOben.z = zo5;
-			arme[5].AnkerOben.z = zo6;
-}
-
-void Hexapod::ankerSetzenUntenX(float xu1, float xu2, float xu3, float xu4,
-		float xu5, float xu6) {
-			arme[0].AnkerUnten.x = xu1;
-			arme[1].AnkerUnten.x = xu2;
-			arme[2].AnkerUnten.x = xu3;
-			arme[3].AnkerUnten.x = xu4;
-			arme[4].AnkerUnten.x = xu5;
-			arme[5].AnkerUnten.x = xu6;
-}
-
-void Hexapod::ankerSetzenUntenY(float yu1, float yu2, float yu3, float yu4,
-		float yu5, float yu6) {
-			arme[0].AnkerUnten.y = yu1;
-			arme[1].AnkerUnten.y = yu2;
-			arme[2].AnkerUnten.y = yu3;
-			arme[3].AnkerUnten.y = yu4;
-			arme[4].AnkerUnten.y = yu5;
-			arme[5].AnkerUnten.y = yu6;
-}
-
-void Hexapod::ankerSetzenUntenZ(float zu1, float zu2, float zu3, float zu4,
-		float zu5, float zu6) {
-			arme[0].AnkerUnten.z = zu1;
-			arme[1].AnkerUnten.z = zu2;
-			arme[2].AnkerUnten.z = zu3;
-			arme[3].AnkerUnten.z = zu4;
-			arme[4].AnkerUnten.z = zu5;
-			arme[5].AnkerUnten.z = zu6;
-}
-
-void Hexapod::erstelleMotor(int name, int pwmPin, int analogPin, int waagerecht,
-		int senkrecht) {
-	switch (name) {
-	case 1:
-		arme[0].aktor.setPins(analogPin, pwmPin);
-		arme[0].aktor.setAngles(waagerecht, senkrecht);
-		break;
-	case 2:
-		arme[1].aktor.setPins(analogPin, pwmPin);
-		arme[1].aktor.setAngles(waagerecht, senkrecht);
-		break;
-	case 3:
-		arme[2].aktor.setPins(analogPin, pwmPin);
-		arme[2].aktor.setAngles(waagerecht, senkrecht);
-		break;
-	case 4:
-		arme[3].aktor.setPins(analogPin, pwmPin);
-		arme[3].aktor.setAngles(waagerecht, senkrecht);
-		break;
-	case 5:
-		arme[4].aktor.setPins(analogPin, pwmPin);
-		arme[4].aktor.setAngles(waagerecht, senkrecht);
-		break;
-	case 6:
-		arme[5].aktor.setPins(analogPin, pwmPin);
-		arme[5].aktor.setAngles(waagerecht, senkrecht);
-		break;
-	}
-}
-
+/*
+ * Fährt den Hexapod in seine Ausgangsposition.
+ */
 void Hexapod::goHome() {
 	for (int i = 0;i<6;i++){
 		arme[i].aktor.stelle(45);
@@ -138,21 +57,21 @@ Vector Hexapod::calcRotMatrix(Vector b, float yaw, float pitch, float roll) {
 /*
  * Ermöglicht das Verfahren der oberen Plattform in anzugebene kartesische Koordinaten und die dazugehörigen Eulerwinkel
  */
-void Hexapod::verfahren(float xx, float yy, float zz, float yawAngel,
-		float pitchAngel, float rollAngel) {
+void Hexapod::verfahren(float xx, float yy, float zz, float yawAngle,
+		float pitchAngle, float rollAngle) {
 	//Ortsvektor der Zielkoordinaten
 	Vector ziel;
 	ziel.x = xx;
 	ziel.y = yy;
 	ziel.z = zz;
 	//Umwandeln der Winkel in Rad
-	float yAngel = (yawAngel * DEG2RAD);
-	float pAngel = (pitchAngel * DEG2RAD);
-	float rAngel = (rollAngel * DEG2RAD);
+	float yAngle = (yawAngle * DEG2RAD);
+	float pAngle = (pitchAngle * DEG2RAD);
+	float rAngle = (rollAngle * DEG2RAD);
 	//Berechnung der dynamischen Laenge und des dafuer verantwortlichen Winkels des Stellers
 	for (int i = 0; i < 6; i++) {
-		Vector matrixErgebnis = calcRotMatrix(arme[i].AnkerOben, yAngel, pAngel,
-				rAngel);
+		Vector matrixErgebnis = calcRotMatrix(arme[i].AnkerOben, yAngle, pAngle,
+				rAngle);
 		arme[i].dynLaenge = ziel + matrixErgebnis - arme[i].AnkerUnten;
 		//Winkel - Hilfsgrößen
 		float L = (arme[i].dynLaenge * arme[i].dynLaenge)

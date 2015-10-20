@@ -16,32 +16,17 @@
 
 class Hexapod {
 
-
 public:
 
-	Hexapod(float,float,int,int,int,int,int,int);
+	Hexapod(float ankerUX[6], float ankerUY[6], float ankerUZ[6],
+			float ankerOX[6], float ankerOY[6], float ankerOZ[6], int winkel[6],
+			int pwm[6], int analog[6], int waagerecht[6], int senkrecht[6]);
 
 	virtual ~Hexapod();
 
-	void ankerSetzenObenX(float,float,float,float,float,float);
-
-	void ankerSetzenObenY(float,float,float,float,float,float);
-
-	void ankerSetzenObenZ(float,float,float,float,float,float);
-
-	void ankerSetzenUntenX(float,float,float,float,float,float);
-
-	void ankerSetzenUntenY(float,float,float,float,float,float);
-
-	void ankerSetzenUntenZ(float,float,float,float,float,float);
-
-	void erstelleMotor(int,int,int,int,int);
-
-	void createSteller();
-
 	void goHome();
 
-	void verfahren(float,float,float,float,float,float);
+	void verfahren(float, float, float, float, float, float);
 
 private:
 
@@ -62,8 +47,6 @@ private:
 	arm arme[6];
 
 	Vector calcRotMatrix(Vector, float, float, float);
-
-
 
 };
 
