@@ -6,11 +6,14 @@
  */
 #include "Hexapod.h"
 
-Hexapod::Hexapod(float ankerUX[6], float ankerUY[6], float ankerUZ[6],
+Hexapod::Hexapod(float LOA, float LUA,float ankerUX[6], float ankerUY[6], float ankerUZ[6],
 		float ankerOX[6], float ankerOY[6], float ankerOZ[6], int winkel[6],
 		int pwm[6], int analog[6], int waagerecht[6], int senkrecht[6]) {
 	//Geometrie der Arme definieren
 	for (int i = 0; i < 6; i++) {
+		//Armlängen definieren
+		arme[i].LaengeOberarm = LOA;
+		arme[i].LaengeUnterarm = LUA;
 		//Oberen Anker definieren
 		arme[i].AnkerOben.x = ankerOX[i];
 		arme[i].AnkerOben.y = ankerOY[i];
@@ -25,7 +28,8 @@ Hexapod::Hexapod(float ankerUX[6], float ankerUY[6], float ankerUZ[6],
 		arme[i].aktor.setPins(analog[i], pwm[i]);
 		arme[i].aktor.setAngles(waagerecht[i], senkrecht[i]);
 		//Berechnen des neutralen Winkels, mit dem 5 Servo, da dieser ein beta von 0 hat.
-		homeWinkel = calcHomeWinkel(4);
+		//homeWinkel = calcHomeWinkel(4);
+		homeWinkel = 45.0;
 	}
 }
 
@@ -58,7 +62,6 @@ Vector Hexapod::calcRotMatrix(Vector b, float yaw, float pitch, float roll) {
 }
 
 float Hexapod::calcHomeWinkel(int winkel) {
-	float a0;
 	float xOxU = (arme[winkel].AnkerOben.x - arme[winkel].AnkerUnten.x);
 	float yOyU = (arme[winkel].AnkerOben.y - arme[winkel].AnkerUnten.y);
 	float h0 = sqrt(
@@ -68,7 +71,7 @@ float Hexapod::calcHomeWinkel(int winkel) {
 	float L0 = 2 * arme[winkel].LaengeOberarm * arme[winkel].LaengeOberarm;
 	float M0 = 2 * arme[winkel].LaengeOberarm * xOxU;
 	float N0 = 2 * arme[winkel].LaengeOberarm * (h0 + arme[winkel].AnkerOben.z);
-	float a0 = (asin(L0/sqrt(M0*M0+N0*N0)) - atan2(M0, N0)) * RAD2DEG;
+	double a0 = (asin(L0/sqrt(M0*M0+N0*N0)) - atan2(M0, N0)) * RAD2DEG;
 	return a0;
 }
 
@@ -90,21 +93,36 @@ void Hexapod::verfahren(float xx, float yy, float zz, float yawAngle,
 	for (int i = 0; i < 6; i++) {
 		Vector matrixErgebnis = calcRotMatrix(arme[i].AnkerOben, yAngle, pAngle,
 				rAngle);
-		arme[i].dynLaenge = ziel + matrixErgebnis - arme[i].AnkerUnten;
+		Vector qErgebnis = ziel + matrixErgebnis;
+		Vector lErgebnis = ziel + matrixErgebnis - arme[i].AnkerUnten;
+		 arme[i].dynLaenge = lErgebnis.Length();
+		 Serial.print("Länge =");
+		 Serial.print(arme[i].dynLaenge);
 		//Winkel - Hilfsgrößen
 		float L = (arme[i].dynLaenge * arme[i].dynLaenge)
-				- (arme[i].LaengeUnterarm * arme[i].LaengeUnterarm)
-				+ (arme[i].LaengeOberarm * arme[i].LaengeOberarm);
+				- ((arme[i].LaengeUnterarm * arme[i].LaengeUnterarm)
+				- (arme[i].LaengeOberarm * arme[i].LaengeOberarm));
+		Serial.print("L =");
+		Serial.print(L);
 		float M = 2 * arme[i].LaengeOberarm
-				* (arme[i].AnkerOben.z - arme[i].AnkerUnten.z);
+				* (qErgebnis.z - arme[i].AnkerUnten.z);   //Änderung
+		Serial.print("M =");
+		Serial.print(M);
 		float N = 2 * arme[i].LaengeOberarm
 				* (cos(arme[i].WinkelAusrichtung)
-						* (arme[i].AnkerOben.x - arme[i].AnkerUnten.x)
+					* (qErgebnis.x - arme[i].AnkerUnten.x)  	//Änderung
 						+ sin(arme[i].WinkelAusrichtung)
-								* (arme[i].AnkerOben.y - arme[i].AnkerUnten.y));
+								* (qErgebnis.y - arme[i].AnkerUnten.y)); //Änderung
+		Serial.print("N =");
+		Serial.print(N);
 		//Berechnen des Winkels
-		arme[i].dynWinkel = (asin(L / sqrt(M * M + N * N)) - atan2(N, M))
+		float wurzel = sqrt((M * M) + (N * N));
+		Serial.print("wurzel =");
+		Serial.print(wurzel);
+		arme[i].dynWinkel = (asin(L / sqrt((M * M) + (N * N))) - atan2(N, M))
 				* RAD2DEG;
+		Serial.print("Winkel =");
+		Serial.print(arme[i].dynWinkel);
 	}
 	for (int i = 0; i < 6; i++) {
 		int winkel = int(arme[i].dynWinkel) - int(homeWinkel);

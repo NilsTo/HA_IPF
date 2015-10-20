@@ -18,7 +18,7 @@ class Hexapod {
 
 public:
 
-	Hexapod(float ankerUX[6], float ankerUY[6], float ankerUZ[6],
+	Hexapod(float LOA,float LUA,float ankerUX[6], float ankerUY[6], float ankerUZ[6],
 			float ankerOX[6], float ankerOY[6], float ankerOZ[6], int winkel[6],
 			int pwm[6], int analog[6], int waagerecht[6], int senkrecht[6]);
 
@@ -27,6 +27,8 @@ public:
 	void goHome();
 
 	void verfahren(float, float, float, float, float, float);
+
+	float calcHomeWinkel(int);
 
 private:
 
@@ -53,7 +55,7 @@ private:
 	/*
 	 * Funktion, die den Normalwinkel berechnet, benötigt als int, bei welchem Servo beta=0
 	 */
-	float calcHomeWinkel(int);
+
 
 };
 
