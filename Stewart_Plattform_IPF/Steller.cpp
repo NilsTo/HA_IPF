@@ -31,6 +31,7 @@ Steller::~Steller() {
 void Steller::setAngles(int flat, int upright) {
 	this->_upright = upright;
 	this->_flat = flat;
+	this->_angleSet = true;
 }
 
 /**
@@ -40,6 +41,7 @@ void Steller::setAngles(int flat, int upright) {
 void Steller::setPins(int analogPin, int pwmPin) {
 	this->_analogPin = analogPin;
 	this->_pwmPin = pwmPin;
+	this->_pinSet = true;
 }
 
 /**
@@ -60,10 +62,14 @@ void Steller::setAnalogLimits() {
  *  schließt den Servo an.
  */
 void Steller::attach() {
-	this->Servo::attach(_pwmPin);
+	if (_angleSet && _pinSet) {
+		this->Servo::attach(_pwmPin);
+		this->stelle(90);	// initiale Fahrt zur Spitze
+		delay(500);			// nacheinander
+	}
 }
 
-void Steller::detach(){
+void Steller::detach() {
 	this->Servo::detach();
 }
 
@@ -75,6 +81,7 @@ void Steller::stelle(int angle) {
 		int setpoint = map(angle, 0, 90, _flat, _upright);
 		// Ausgabe des Servosignals
 		this->Servo::write(setpoint);
+		this->_lastAngle = angle;
 		//wurde entfernt, weil Fehler!
 		Serial.println(setpoint);
 		Serial.println("upright");
@@ -93,7 +100,7 @@ void Steller::stelle(int angle) {
  *  Gibt den aufgrund der Potentiometer-Spannung ermittelten Winkel des Servohorns zurueck.
  *  Sollten die Grenzen noch nicht gesetzt sein, gibt sie 1023 zurueck.
  */
-int Steller::getAngle() {
+int Steller::getAnalogAngle() {
 	if (_minAn != 0 && _maxAn != 0) {
 		int angle = map(analogRead(_analogPin), _minAn, _maxAn, 0, 90);
 		return angle;
@@ -102,4 +109,13 @@ int Steller::getAngle() {
 				"Limits are not known yet. Steller::setAnalogLimits() may be a good idea.");
 		return 1023;
 	}
+}
+
+/**
+ * gibt zuletzt geschriebenen Wert (ohne Mapping) zurueck,
+ * der am Ende von ::stelle jeweils in das Objekt geschrieben wird.
+ */
+
+int Steller::getLastAngle() {
+	return _lastAngle;
 }
