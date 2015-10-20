@@ -27,9 +27,17 @@ public:
 
 	void AnkerSetzenObenY(float,float,float,float,float,float);
 
+	void AnkerSetzenObenZ(float,float,float,float,float,float);
+
 	void AnkerSetzenUntenX(float,float,float,float,float,float);
 
 	void AnkerSetzenUntenY(float,float,float,float,float,float);
+
+	void AnkerSetzenUntenZ(float,float,float,float,float,float);
+
+	void createSteller();
+
+	void goHome();
 
 	void verfahren(float,float,float,float,float,float);
 
@@ -47,7 +55,7 @@ private:
 		float dynLaenge;
 		float dynWinkel;
 	};
-
+// Array zur Aufnahme der 6 Arme an einer Plattform
 	arm arme[6];
 
 	// TODO Hier noch neue Array von Klasse Steller hinzufuegen
