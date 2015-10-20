@@ -39,7 +39,7 @@ Hexapod::Hexapod(float LOA, float LUA, int W1, int W2, int W3, int W4, int W5,
 Hexapod::~Hexapod() {
 	// TODO Auto-generated destructor stub
 }
-void Hexapod::AnkerSetzenObenX(float xo1, float xo2, float xo3, float xo4,
+void Hexapod::ankerSetzenObenX(float xo1, float xo2, float xo3, float xo4,
 		float xo5, float xo6) {
 	for (int i = 0; i < 6; i++) {
 		switch (i) {
@@ -65,7 +65,7 @@ void Hexapod::AnkerSetzenObenX(float xo1, float xo2, float xo3, float xo4,
 	}
 }
 
-void Hexapod::AnkerSetzenObenY(float yo1, float yo2, float yo3, float yo4,
+void Hexapod::ankerSetzenObenY(float yo1, float yo2, float yo3, float yo4,
 
 float yo5, float yo6) {
 	for (int i = 0; i < 6; i++) {
@@ -92,7 +92,7 @@ float yo5, float yo6) {
 	}
 }
 
-void Hexapod::AnkerSetzenObenZ(float zo1, float zo2, float zo3, float zo4,
+void Hexapod::ankerSetzenObenZ(float zo1, float zo2, float zo3, float zo4,
 		float zo5, float zo6) {
 	for (int i = 0; i < 6; i++) {
 		switch (i) {
@@ -118,7 +118,7 @@ void Hexapod::AnkerSetzenObenZ(float zo1, float zo2, float zo3, float zo4,
 	}
 }
 
-void Hexapod::AnkerSetzenUntenX(float xu1, float xu2, float xu3, float xu4,
+void Hexapod::ankerSetzenUntenX(float xu1, float xu2, float xu3, float xu4,
 		float xu5, float xu6) {
 	for (int i = 0; i < 6; i++) {
 		switch (i) {
@@ -144,7 +144,7 @@ void Hexapod::AnkerSetzenUntenX(float xu1, float xu2, float xu3, float xu4,
 	}
 }
 
-void Hexapod::AnkerSetzenUntenY(float yu1, float yu2, float yu3, float yu4,
+void Hexapod::ankerSetzenUntenY(float yu1, float yu2, float yu3, float yu4,
 		float yu5, float yu6) {
 	for (int i = 0; i < 6; i++) {
 		switch (i) {
@@ -170,7 +170,7 @@ void Hexapod::AnkerSetzenUntenY(float yu1, float yu2, float yu3, float yu4,
 	}
 }
 
-void Hexapod::AnkerSetzenUntenZ(float zu1, float zu2, float zu3, float zu4,
+void Hexapod::ankerSetzenUntenZ(float zu1, float zu2, float zu3, float zu4,
 		float zu5, float zu6) {
 	for (int i = 0; i < 6; i++) {
 		switch (i) {
@@ -196,8 +196,40 @@ void Hexapod::AnkerSetzenUntenZ(float zu1, float zu2, float zu3, float zu4,
 	}
 }
 
+void Hexapod::erstelleMotor(int name, int pwmPin, int analogPin, int waagerecht,
+		int senkrecht) {
+	switch (name) {
+	case 1:
+		arme[0].aktor.setPins(analogPin, pwmPin);
+		arme[0].aktor.setAngles(waagerecht, senkrecht);
+		break;
+	case 2:
+		arme[1].aktor.setPins(analogPin, pwmPin);
+		arme[1].aktor.setAngles(waagerecht, senkrecht);
+		break;
+	case 3:
+		arme[2].aktor.setPins(analogPin, pwmPin);
+		arme[2].aktor.setAngles(waagerecht, senkrecht);
+		break;
+	case 4:
+		arme[3].aktor.setPins(analogPin, pwmPin);
+		arme[3].aktor.setAngles(waagerecht, senkrecht);
+		break;
+	case 5:
+		arme[4].aktor.setPins(analogPin, pwmPin);
+		arme[4].aktor.setAngles(waagerecht, senkrecht);
+		break;
+	case 6:
+		arme[5].aktor.setPins(analogPin, pwmPin);
+		arme[5].aktor.setAngles(waagerecht, senkrecht);
+		break;
+	}
+}
+
 void Hexapod::goHome() {
-	// TODO Alle Servos auf 45 Grad fahren lassen
+	for (int i = 0;i<6;i++){
+		arme[i].aktor.stelle(45);
+	}
 }
 
 /*
@@ -249,6 +281,9 @@ void Hexapod::verfahren(float xx, float yy, float zz, float yawAngel,
 		arme[i].dynWinkel = (asin(L / sqrt(M * M + N * N)) - atan(N / M))
 				* RAD2DEG;
 	}
-	// TODO Verfahren der Servos an Position
+	for (int i = 0;i<6;i++){
+		int winkel = int(arme[i].dynWinkel);
+		arme[i].aktor.stelle(winkel);
+	}
 }
 

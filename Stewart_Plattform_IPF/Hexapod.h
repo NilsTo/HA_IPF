@@ -12,7 +12,7 @@
 
 #include "Arduino.h"
 #include "Vector.h"
-
+#include "Steller.h"
 
 class Hexapod {
 
@@ -23,17 +23,19 @@ public:
 
 	virtual ~Hexapod();
 
-	void AnkerSetzenObenX(float,float,float,float,float,float);
+	void ankerSetzenObenX(float,float,float,float,float,float);
 
-	void AnkerSetzenObenY(float,float,float,float,float,float);
+	void ankerSetzenObenY(float,float,float,float,float,float);
 
-	void AnkerSetzenObenZ(float,float,float,float,float,float);
+	void ankerSetzenObenZ(float,float,float,float,float,float);
 
-	void AnkerSetzenUntenX(float,float,float,float,float,float);
+	void ankerSetzenUntenX(float,float,float,float,float,float);
 
-	void AnkerSetzenUntenY(float,float,float,float,float,float);
+	void ankerSetzenUntenY(float,float,float,float,float,float);
 
-	void AnkerSetzenUntenZ(float,float,float,float,float,float);
+	void ankerSetzenUntenZ(float,float,float,float,float,float);
+
+	void erstelleMotor(int,int,int,int,int);
 
 	void createSteller();
 
@@ -54,11 +56,10 @@ private:
 		int WinkelAusrichtung;
 		float dynLaenge;
 		float dynWinkel;
+		Steller aktor;
 	};
 // Array zur Aufnahme der 6 Arme an einer Plattform
 	arm arme[6];
-
-	// TODO Hier noch neue Array von Klasse Steller hinzufuegen
 
 	Vector calcRotMatrix(Vector, float, float, float);
 
