@@ -18,9 +18,9 @@ class Hexapod {
 
 public:
 
-	Hexapod(float LOA,float LUA,float ankerUX[6], float ankerUY[6], float ankerUZ[6],
-			float ankerOX[6], float ankerOY[6], float ankerOZ[6], int winkel[6],
-			int pwm[6], int analog[6], int waagerecht[6], int senkrecht[6]);
+	Hexapod(float LOA, float LUA,float dhoehe, float baseR, float topR, float basewi[6],
+			float topwi[6], float winkel[6], int pwm[6], int analog[6],
+			int waagerecht[6], int senkrecht[6]);
 
 	virtual ~Hexapod();
 
@@ -36,26 +36,26 @@ private:
 	 * Dateityp Arm fuer die Spaetere Zusamenfassung geometrischer Merkmale.
 	 */
 	struct arm {
-		Vector AnkerUnten;
-		Vector AnkerOben;
+		Vector baseVec;
+		Vector topVec;
 		float LaengeOberarm;
 		float LaengeUnterarm;
-		int WinkelAusrichtung;
+		float beta;
 		float dynLaenge;
 		float dynWinkel;
 		Steller aktor;
 	};
 // Array zur Aufnahme der 6 Arme an einer Plattform
-	arm arme[6];
+	arm a[6];
 
 //Wert des neutralWinkels, wird im constructor berechnet
 	float homeWinkel;
+	Vector dheight;
 
 	Vector calcRotMatrix(Vector, float, float, float);
 	/*
 	 * Funktion, die den Normalwinkel berechnet, benötigt als int, bei welchem Servo beta=0
 	 */
-
 
 };
 
