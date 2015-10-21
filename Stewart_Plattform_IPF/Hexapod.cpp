@@ -31,7 +31,7 @@ Hexapod::Hexapod(float LOA, float LUA, float dhoehe, float baseR, float topR,
 		//dhight.x = 0.0;
 		//dhight.y = 0.0;
 		dheight.z = dhoehe;
-		homeWinkel = 45.0;
+		homeWinkel = 36.0;
 	}
 }
 
@@ -39,7 +39,7 @@ Hexapod::~Hexapod() {
 	// TODO Auto-generated destructor stub
 }
 /*
- * Fährt den Hexapod in seine Ausgangsposition.
+ * Fährt den Hexapod in seine Ausgangsposition. UNSAUBER!!
  */
 void Hexapod::goHome() {
 	for (int i = 0; i < 6; i++) {
@@ -70,10 +70,12 @@ float Hexapod::calcHomeWinkel(int winkel) {
 			(a[winkel].LaengeUnterarm * a[winkel].LaengeUnterarm)
 					+ (a[winkel].LaengeOberarm * a[winkel].LaengeOberarm)
 					- (xOxU * xOxU) - (yOyU * yOyU)) - a[winkel].topVec.z;
+	Serial.println("H0");
+	Serial.print(h0);
 	float L0 = 2 * a[winkel].LaengeOberarm * a[winkel].LaengeOberarm;
 	float M0 = 2 * a[winkel].LaengeOberarm * xOxU;
 	float N0 = 2 * a[winkel].LaengeOberarm * (h0 + a[winkel].topVec.z);
-	double a0 = (asin(L0 / sqrt(M0 * M0 + N0 * N0)) - atan2(M0, N0)) * RAD2DEG;
+	float a0 = (asin(L0 / sqrt(M0 * M0 + N0 * N0)) - atan2(M0, N0)) * RAD_TO_DEG;
 	return a0;
 }
 
@@ -82,8 +84,8 @@ float Hexapod::calcHomeWinkel(int winkel) {
  */
 void Hexapod::verfahren(float xx, float yy, float zz, float yawAngle,
 		float pitchAngle, float rollAngle) {
-	Serial.print("Eingabe: ");
-	Serial.println(yawAngle);
+	Serial.println("Eingabe");
+	Serial.print(yawAngle);
 //Ortsvektor der Zielkoordinaten
 	Vector ziel;
 	ziel.x = xx;
@@ -115,7 +117,6 @@ void Hexapod::verfahren(float xx, float yy, float zz, float yawAngle,
 				* RAD_TO_DEG;
 		Serial.print("Winkel =");
 		Serial.print(a[i].dynWinkel);
-
 	}
 	Serial.println("Ende");
 	for (int i = 0; i < 6; i++) {
