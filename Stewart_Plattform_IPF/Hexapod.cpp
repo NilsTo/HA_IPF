@@ -27,9 +27,8 @@ Hexapod::Hexapod(float LOA, float LUA, float dhoehe, float baseR, float topR,
 		//Definieren der Servovariabeln
 		a[i].aktor.setPins(analog[i], pwm[i]);
 		a[i].aktor.setAngles(waagerecht[i], senkrecht[i]);
-		//Berechnen des neutralen Winkels, mit dem 5 Servo, da dieser ein beta von 0 hat.
-		//dhight.x = 0.0;
-		//dhight.y = 0.0;
+		dheight.x = 0.0;
+		dheight.y = 0.0;
 		dheight.z = dhoehe;
 		homeWinkel = 36.0;
 	}
@@ -119,12 +118,22 @@ void Hexapod::verfahren(float xx, float yy, float zz, float yawAngle,
 		Serial.print(a[i].dynWinkel);
 	}
 	Serial.println("Ende");
+	//Checken, ob Werte erreicht werden koennen.
+	for (int i = 0;i<6;i++){
+		float wi = a[i].dynWinkel;
+		if (wi <0 || wi >90 || isnan(wi) != 0) return;
+	}
+	//Ausgabe der Winkel an den Steller - Verfahren der Arme
 	for (int i = 0; i < 6; i++) {
 		int stellWinkel = int(a[i].dynWinkel + 0.5);
 	    Serial.print(stellWinkel);
 	    a[i].aktor.attach();
 		a[i].aktor.stelle(stellWinkel);
 	}
+	/*
+	 * Delay für Trägheit der Aktoren.
+	 * TODO dynamisches Delay, angepasst an die groesste Reisezeit = [max(delta(winkel))/speed]
+	 */
 	delay(300);
 }
 
