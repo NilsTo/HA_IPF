@@ -122,7 +122,7 @@ void Hexapod::verfahren(float xx, float yy, float zz, float yawAngle,
 	//Ausgabe der Winkel an den Steller - Verfahren der Arme
 	//Berechnung des groesten Stellwinkels.
 	int pause;
-	int deltaWiMax = 1;
+	int deltaWiMax = 1;  //Muss !=0 sein, damit keine Division mit 0 erfolgt.
 	for (int i = 0; i < 6; i++) {
 		int deltaWi = 0;
 		int stellWinkel = int(a[i].dynWinkel + 0.5);

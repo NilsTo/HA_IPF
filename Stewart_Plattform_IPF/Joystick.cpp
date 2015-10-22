@@ -28,7 +28,7 @@ int Joystick::geglaettet(int eingang) {
 	while (i < 21) {
 		messwerte = messwerte + analogRead(eingang);
 		i++;
-		delay(5);
+		delay(1);
 	}
 	float ergebnis = messwerte / i;
 	return int(ergebnis);
