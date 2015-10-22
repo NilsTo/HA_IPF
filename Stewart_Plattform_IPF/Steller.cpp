@@ -102,17 +102,19 @@ void Steller::detach() {
 /**
  *  Vereinfacht das Einstellen eines Winkels am Servo
  */
-void Steller::stelle(int angle) {
+int Steller::stelle(int angle) {
+	int deltaAngle;
 	if (angle >= 0 && angle < 91) {
 		int setpoint = map(angle, 0, 90, _flat, _upright);
 		// Ausgabe des Servosignals
+		deltaAngle = abs(angle - _lastAngle);
 		this->Servo::write(setpoint);
 		this->_lastAngle = angle;
-		//delay(200); // TODO Wie lang muss der Servo wirklich angesteuert werden?
-
+		return deltaAngle;
 	} else {
 		Serial.println(
 				"Angle input error. Steller::stelle did not recieve a correct angle.");
+		return 90;
 	}
 }
 

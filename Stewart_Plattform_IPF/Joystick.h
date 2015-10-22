@@ -13,15 +13,20 @@
 
 class Joystick {
 public:
-	Joystick(int x0Wert, int y0Wert,int xAxPin,int yAxPin);
+	Joystick(int x0Wert,int xMinWert,int xMaxWert, int y0Wert,int yMinWert,int yMaxWert,int xAxPin,int yAxPin);
 	virtual ~Joystick();
 	Vector bewegung(int modus);
 
 private:
 	int _x0Wert;
+	int _xMinWert;
+	int _xMaxWert;
 	int _y0Wert;
+	int _yMinWert;
+	int _yMaxWert;
 	int _xAxPin;
 	int _yAxPin;
+
 
 	int	geglaettet(int eingang);
 };
