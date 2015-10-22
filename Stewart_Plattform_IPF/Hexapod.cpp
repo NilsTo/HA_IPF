@@ -124,16 +124,21 @@ void Hexapod::verfahren(float xx, float yy, float zz, float yawAngle,
 		if (wi <0 || wi >90 || isnan(wi) != 0) return;
 	}
 	//Ausgabe der Winkel an den Steller - Verfahren der Arme
+	//Berechnung des groesten Stellwinkels.
+	int pause;
+	int deltaWiMax = 1;
 	for (int i = 0; i < 6; i++) {
+		int deltaWi = 0;
 		int stellWinkel = int(a[i].dynWinkel + 0.5);
 	    Serial.print(stellWinkel);
 	    a[i].aktor.attach();
-		a[i].aktor.stelle(stellWinkel);
+		deltaWi = a[i].aktor.stelle(stellWinkel);
+		if (deltaWi > deltaWiMax) deltaWiMax = deltaWi;
 	}
-	/*
-	 * Delay für Trägheit der Aktoren.
-	 * TODO dynamisches Delay, angepasst an die groesste Reisezeit = [max(delta(winkel))/speed]
-	 */
-	delay(300);
+	//Berechnung der max. Zeit für physisches verfahren eines Aktors
+	Serial.println("DeltaWi");
+	Serial.print(deltaWiMax);
+	pause = int((deltaWiMax / speed));
+	delay(pause);
 }
 

@@ -11,11 +11,13 @@
 #include <Arduino.h>
 #include <Servo.h>
 
+#define speed 0.2727272727f   //Geschwindigkeit eines Servos in [Grad/ms]
+
 class Steller: Servo {
 public:
 	Steller();
 	virtual ~Steller();
-	void stelle(int angle);
+	int stelle(int angle);
 	void attach();
 	void detach();
 	int getAnalogAngle();
