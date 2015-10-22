@@ -16,6 +16,7 @@ public:
 	Joystick(int x0Wert,int xMinWert,int xMaxWert, int y0Wert,int yMinWert,int yMaxWert,int xAxPin,int yAxPin);
 	virtual ~Joystick();
 	Vector bewegung(int modus);
+	Vector ausrichtung();
 
 private:
 	int _x0Wert;

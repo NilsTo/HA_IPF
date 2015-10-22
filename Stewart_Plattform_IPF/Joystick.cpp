@@ -34,6 +34,9 @@ int Joystick::geglaettet(int eingang) {
 	return int(ergebnis);
 }
 
+/*
+ * Gibt +1 oder -1 bei maximalen Ausschlag des Joysticks zurück.
+ */
 Vector Joystick::bewegung(int modus) {
 	Vector bewegung;
 	int auslenkungX = _x0Wert - this->geglaettet(_xAxPin);
@@ -50,5 +53,25 @@ Vector Joystick::bewegung(int modus) {
 	}
 	bewegung.z = 0;
 	return bewegung;
+}
+/*
+ * Gibt die Lage des Joysticks in Eulerwinkeln zurück +-25Grad
+ */
+Vector Joystick::ausrichtung(){
+	Vector ausrichtung;
+	int auslenkungX = _x0Wert - this->geglaettet(_xAxPin);
+	int auslenkungY = _y0Wert - this->geglaettet(_yAxPin);
+	if (auslenkungX < 0) {
+		ausrichtung.x = (map(auslenkungX, 0, (_xMaxWert - _x0Wert), 0, 25000) / 1000.0f);
+	} else {
+		ausrichtung.x = (map(auslenkungX, 0, (_xMinWert - _x0Wert), 0, -25000) / 1000.0f);
+	}
+	if (auslenkungY > 0) {
+		ausrichtung.y = (map(auslenkungY, 0, (_yMaxWert - _y0Wert), 0, 25000) / 1000.0f);
+	} else {
+		ausrichtung.y = (map(auslenkungY, 0, (_yMinWert - _y0Wert), 0, -25000) / 1000.0f);
+	}
+	ausrichtung.z = 0;
+	return ausrichtung;
 }
 
