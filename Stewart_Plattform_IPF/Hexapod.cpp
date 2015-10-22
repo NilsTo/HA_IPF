@@ -69,8 +69,6 @@ float Hexapod::calcHomeWinkel(int winkel) {
 			(a[winkel].LaengeUnterarm * a[winkel].LaengeUnterarm)
 					+ (a[winkel].LaengeOberarm * a[winkel].LaengeOberarm)
 					- (xOxU * xOxU) - (yOyU * yOyU)) - a[winkel].topVec.z;
-	Serial.println("H0");
-	Serial.print(h0);
 	float L0 = 2 * a[winkel].LaengeOberarm * a[winkel].LaengeOberarm;
 	float M0 = 2 * a[winkel].LaengeOberarm * xOxU;
 	float N0 = 2 * a[winkel].LaengeOberarm * (h0 + a[winkel].topVec.z);
@@ -83,8 +81,6 @@ float Hexapod::calcHomeWinkel(int winkel) {
  */
 void Hexapod::verfahren(float xx, float yy, float zz, float yawAngle,
 		float pitchAngle, float rollAngle) {
-	Serial.println("Eingabe");
-	Serial.print(yawAngle);
 //Ortsvektor der Zielkoordinaten
 	Vector ziel;
 	ziel.x = xx;
@@ -131,13 +127,12 @@ void Hexapod::verfahren(float xx, float yy, float zz, float yawAngle,
 		int deltaWi = 0;
 		int stellWinkel = int(a[i].dynWinkel + 0.5);
 	    Serial.print(stellWinkel);
-	    a[i].aktor.attach();
+	    bool aktiv = a[i].aktor.attached();
+	    if (!aktiv) a[i].aktor.attach();
 		deltaWi = a[i].aktor.stelle(stellWinkel);
 		if (deltaWi > deltaWiMax) deltaWiMax = deltaWi;
 	}
 	//Berechnung der max. Zeit für physisches verfahren eines Aktors
-	Serial.println("DeltaWi");
-	Serial.print(deltaWiMax);
 	pause = int((deltaWiMax / speed));
 	delay(pause);
 }

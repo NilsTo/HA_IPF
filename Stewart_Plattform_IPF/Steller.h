@@ -13,7 +13,7 @@
 
 #define speed 0.2727272727f   //Geschwindigkeit eines Servos in [Grad/ms]
 
-class Steller: Servo {
+class Steller: public Servo {
 public:
 	Steller();
 	virtual ~Steller();
@@ -22,6 +22,7 @@ public:
 	void detach();
 	int getAnalogAngle();
 	int getLastAngle();
+	bool aktiv();
 	void setAngles(int flat, int upright);
 	void setPins(int analogPin, int pwmPin);
 private:
