@@ -2,6 +2,8 @@
 #include "Stewart_Plattform_IPF.h"
 #include "Hexapod.h"
 #include "Arduino.h"
+#include "Joystick.h"
+#include "Vector.h"
 
 /*
  * Geometrische Daten der Basis und Top. Winkel sind die die mathematisch positiv eingezeichneten Winkel
@@ -29,11 +31,18 @@ int pwmpin[6] = { 10, 8, 7, 12, 11, 9 };
 int analogpin[6] = { 2, 4, 5, 0, 1, 3 };
 int flat[6] = { 4, 166, 4, 161, 7, 147 };
 int upright[6] = { 90, 71, 94, 66, 99, 51 };
+
+//-----------------------
+	float xwert;
+	float ywert;
+	Vector ziel;
+//------------------
 /*
  * Initialisierung des Hexapods
  */
 Hexapod nils(laengeOberarm, laengeUnterarm, defaultHeight, baseR, topR, baseWi,
 		topWi, beta, pwmpin, analogpin, flat, upright);
+Joystick bediener(486,259,800,474,265,794,2,3);
 
 void setup() {
 // Add your initialization code here
@@ -42,8 +51,12 @@ void setup() {
 
 // The loop function is called in an endless loop
 void loop() {
-	nils.verfahren(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-	delay(5000);
+	ziel = bediener.bewegung(1);
+	xwert = ziel.x;
+	ywert = ziel.y;
+	Serial.println(xwert);
+	Serial.println(ywert);
+	delay(1000);
 
 //Add your repeated code here
 }
