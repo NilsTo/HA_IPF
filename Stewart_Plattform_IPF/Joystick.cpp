@@ -43,7 +43,7 @@ Vector Joystick::bewegung(int modus) {
 	} else {
 		bewegung.x = (map(auslenkungX, 0, (_xMinWert - _x0Wert), 0, -1000) / 1000.0f);
 	}
-	if (auslenkungY < 0) {
+	if (auslenkungY > 0) {
 		bewegung.y = (map(auslenkungY, 0, (_yMaxWert - _y0Wert), 0, 1000) / 1000.0f);
 	} else {
 		bewegung.y = (map(auslenkungY, 0, (_yMinWert - _y0Wert), 0, -1000) / 1000.0f);

@@ -33,8 +33,8 @@ int flat[6] = { 4, 166, 4, 161, 7, 147 };
 int upright[6] = { 90, 71, 94, 66, 99, 51 };
 
 //-----------------------
-	float xwert;
-	float ywert;
+	float xwert = 0;
+	float ywert = 0;
 	Vector ziel;
 //------------------
 /*
@@ -42,7 +42,7 @@ int upright[6] = { 90, 71, 94, 66, 99, 51 };
  */
 Hexapod nils(laengeOberarm, laengeUnterarm, defaultHeight, baseR, topR, baseWi,
 		topWi, beta, pwmpin, analogpin, flat, upright);
-Joystick bediener(486,250,772,474,255,766,2,3);
+Joystick bediener(486,250,772,474,255,766,9,8);
 
 void setup() {
 // Add your initialization code here
@@ -51,14 +51,9 @@ void setup() {
 
 // The loop function is called in an endless loop
 void loop() {
-	//ziel = bediener.bewegung(1);
-	//xwert = ziel.x;
-	//ywert = ziel.y;
-	//Serial.println(xwert);
-	//Serial.println(ywert);
-	//delay(1000);
-	nils.verfahren(0.0,0.0,0.0,0.0,25.0,0.0);
-	delay(5000);
-
+	ziel = bediener.bewegung(1);
+	xwert = xwert + (ziel.x*3);
+	ywert = ywert + (ziel.y*3);
+	nils.verfahren(0.0,0.0,0.0,0.0,xwert,ywert);
 //Add your repeated code here
 }
