@@ -79,7 +79,7 @@ float Hexapod::calcHomeWinkel(int winkel) {
 /*
  * Ermöglicht das Verfahren der oberen Plattform in anzugebene kartesische Koordinaten und die dazugehörigen Eulerwinkel
  */
-void Hexapod::verfahren(float xx, float yy, float zz, float yawAngle,
+bool Hexapod::verfahren(float xx, float yy, float zz, float yawAngle,
 		float pitchAngle, float rollAngle) {
 //Ortsvektor der Zielkoordinaten
 	Vector ziel;
@@ -117,7 +117,7 @@ void Hexapod::verfahren(float xx, float yy, float zz, float yawAngle,
 	//Checken, ob Werte erreicht werden koennen.
 	for (int i = 0;i<6;i++){
 		float wi = a[i].dynWinkel;
-		if (wi <0 || wi >90 || isnan(wi) != 0) return;
+		if (wi <0 || wi >90 || isnan(wi) != 0) return false;
 	}
 	//Ausgabe der Winkel an den Steller - Verfahren der Arme
 	//Berechnung des groesten Stellwinkels.
@@ -135,5 +135,6 @@ void Hexapod::verfahren(float xx, float yy, float zz, float yawAngle,
 	//Berechnung der max. Zeit für physisches verfahren eines Aktors
 	pause = int((deltaWiMax / speed));
 	delay(pause);
+	return true;
 }
 

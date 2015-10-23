@@ -26,7 +26,7 @@ public:
 
 	void goHome();
 
-	void verfahren(float, float, float, float, float, float);
+	bool verfahren(float, float, float, float, float, float);
 
 	float calcHomeWinkel(int);
 
