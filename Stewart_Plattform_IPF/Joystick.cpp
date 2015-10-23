@@ -88,3 +88,8 @@ Vector Joystick::ausrichtung() {
 	return ausrichtung;
 }
 
+bool Joystick::klick(){
+	if (analogRead(_xAxPin) > 950) return true;
+	return false;
+}
+

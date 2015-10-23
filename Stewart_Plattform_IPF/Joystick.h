@@ -18,6 +18,7 @@ public:
 	Vector bewegung(int modus);
 	Vector ausrichtung();
 	void kalibrieren();
+	bool klick();
 
 private:
 	int _x0Wert;

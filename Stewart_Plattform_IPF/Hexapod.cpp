@@ -97,8 +97,6 @@ bool Hexapod::verfahren(float xx, float yy, float zz, float yawAngle,
 		Vector q = ziel + matrixErgebnis + dheight;
 		Vector l = q - a[i].baseVec;
 		a[i].dynLaenge = l.Length();
-		Serial.println("Länge =");
-		Serial.print(a[i].dynLaenge);
 		//Winkel - Hilfsgrößen
 		float L = (a[i].dynLaenge * a[i].dynLaenge)
 				- (a[i].LaengeUnterarm * a[i].LaengeUnterarm)
@@ -110,10 +108,7 @@ bool Hexapod::verfahren(float xx, float yy, float zz, float yawAngle,
 		//Berechnen des Winkels
 		a[i].dynWinkel = (asin(L / sqrt(M * M + N * N)) - atan(N / M))
 				* RAD_TO_DEG;
-		Serial.print("Winkel =");
-		Serial.print(a[i].dynWinkel);
 	}
-	Serial.println("Ende");
 	//Checken, ob Werte erreicht werden koennen.
 	for (int i = 0;i<6;i++){
 		float wi = a[i].dynWinkel;
@@ -126,7 +121,6 @@ bool Hexapod::verfahren(float xx, float yy, float zz, float yawAngle,
 	for (int i = 0; i < 6; i++) {
 		int deltaWi = 0;
 		int stellWinkel = int(a[i].dynWinkel + 0.5);
-	    Serial.print(stellWinkel);
 	    bool aktiv = a[i].aktor.attached();
 	    if (!aktiv) a[i].aktor.attach();
 		deltaWi = a[i].aktor.stelle(stellWinkel);

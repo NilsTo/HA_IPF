@@ -4,6 +4,7 @@
 #include "Arduino.h"
 #include "Joystick.h"
 #include "Vector.h"
+#include "LiquidCrystal.h"
 
 /*
  * Geometrische Daten der Basis und Top. Winkel sind die die mathematisch positiv eingezeichneten Winkel
@@ -38,27 +39,82 @@ float ywert = 0;
 bool erlaubt = true;
 Vector ziel;
 //------------------
+//---------Lagesensor----
+	float ix;
+	float iy;
+	float iz;
+	float lastIX;
+	float lastIY;
+	float lastIZ;
+	float readx;
+	float ready;
+	float readz;
+	float pitchAng;
+	float rollAng;
+//-------------------------
+
 /*
- * Initialisierung des Hexapods
+ * Initialisierung der Teile
  */
 Hexapod nils(laengeOberarm, laengeUnterarm, defaultHeight, baseR, topR, baseWi,
 		topWi, beta, pwmpin, analogpin, flat, upright);
 Joystick bediener(250, 772, 255, 766, 9, 8);
 
+LiquidCrystal LCD(31,30,32,34,36,38);
+
 void setup() {
 // Add your initialization code here
 	Serial.begin(9600);
 	bediener.kalibrieren();
+	LCD.begin(16,2);
 }
 
 // The loop function is called in an endless loop
 void loop() {
-	//----- Joystick bedienung ------------------------------
+//----- Joystick bedienung ------------------------------
+/*
 	ziel = bediener.bewegung(1);
-	if (ziel.x < 20 && ziel.x > -20 && ziel.y < 20 && ziel.y > -20) {
-		xwert = xwert + (ziel.x);
-		ywert = ywert + (ziel.y);
-	}
+	xwert = xwert + (ziel.x);
+	Serial.println(xwert);
+	ywert = ywert + (ziel.y);
+	if (xwert >20) xwert = 20;
+	if (xwert <-20) xwert = -20;
+	if (ywert >20) ywert = 20;
+	if (ywert <-20) ywert = -20;
+	if (bediener.klick()) {xwert = 0; ywert = 0;}
 	nils.verfahren(0.0, 0.0, 0.0, 0.0, xwert, ywert);
-	//------------------------------------------------------
+	LCD.clear();
+    LCD.setCursor(0,0);
+    LCD.print(xwert);
+    LCD.setCursor(0,1);
+    LCD.print(ywert);
+*/
+//------------------------------------------------------
+
+		readx = (analogRead(15) - 385.0) / 85.0;
+	    ready = (analogRead(14) - 385.0) / 85.0;
+	    readz = (analogRead(13) - 385.0) / 85.0;
+
+	    lastIX = readx;
+		lastIY = ready;
+		lastIZ = readz;
+
+		ix = 0.005 * readx + 0.995 * lastIX;
+		iy = 0.005 * ready + 0.995 * lastIY;
+		iz = 0.005 * readz + 0.995 * lastIZ;
+
+		LCD.clear();
+	    LCD.setCursor(0,0);
+	    LCD.print(readx);
+	    LCD.setCursor(0,1);
+	    LCD.print(readz);
+
+	    pitchAng = RAD_TO_DEG * atan(ix / sqrt(pow(iy, 2) + pow(iz, 2)));
+	    rollAng = RAD_TO_DEG * atan(iy / sqrt(pow(ix, 2) + pow(iz, 2)));
+	    if (abs(pitchAng) < 2.5) pitchAng = 0.0;
+	    if (abs(rollAng) < 2.5) rollAng = 0.0;
+	    nils.verfahren(0.0, 0.0, 0.0, 0.0, pitchAng, -rollAng);
+	    delay(100);
+
 }
+

@@ -27,6 +27,11 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>Libraries/LiquidCrystal</name>
+			<type>2</type>
+			<locationURI>ArduinoLibPath/LiquidCrystal</locationURI>
+		</link>
+		<link>
 			<name>Libraries/Servo</name>
 			<type>2</type>
 			<locationURI>ArduinoLibPath/Servo</locationURI>
