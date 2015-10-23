@@ -33,27 +33,32 @@ int flat[6] = { 4, 166, 4, 161, 7, 147 };
 int upright[6] = { 90, 71, 94, 66, 99, 51 };
 
 //-----------------------
-	float xwert = 0;
-	float ywert = 0;
-	Vector ziel;
+float xwert = 0;
+float ywert = 0;
+bool erlaubt = true;
+Vector ziel;
 //------------------
 /*
  * Initialisierung des Hexapods
  */
 Hexapod nils(laengeOberarm, laengeUnterarm, defaultHeight, baseR, topR, baseWi,
 		topWi, beta, pwmpin, analogpin, flat, upright);
-Joystick bediener(486,250,772,474,255,766,9,8);
+Joystick bediener(250, 772, 255, 766, 9, 8);
 
 void setup() {
 // Add your initialization code here
 	Serial.begin(9600);
+	bediener.kalibrieren();
 }
 
 // The loop function is called in an endless loop
 void loop() {
+	//----- Joystick bedienung ------------------------------
 	ziel = bediener.bewegung(1);
-	xwert = xwert + (ziel.x*3);
-	ywert = ywert + (ziel.y*3);
-	nils.verfahren(0.0,0.0,0.0,0.0,xwert,ywert);
-//Add your repeated code here
+	if (ziel.x < 20 && ziel.x > -20 && ziel.y < 20 && ziel.y > -20) {
+		xwert = xwert + (ziel.x);
+		ywert = ywert + (ziel.y);
+	}
+	nils.verfahren(0.0, 0.0, 0.0, 0.0, xwert, ywert);
+	//------------------------------------------------------
 }
