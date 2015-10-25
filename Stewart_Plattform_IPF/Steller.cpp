@@ -48,10 +48,12 @@ void Steller::setPins(int analogPin, int pwmPin) {
  */
 void Steller::setAnalogLimits() {
 	// Poti-Wert bei waagerechter Position
-	this->stelle(0);
+	this->stelle(3);
+	delay(500);
 	this->_minAn = analogRead(_analogPin);
 	// Poti-Wert bei senkrechter Position
-	this->stelle(90);
+	this->stelle(87);
+	delay(500);
 	this->_maxAn = analogRead(_analogPin);
 }
 
