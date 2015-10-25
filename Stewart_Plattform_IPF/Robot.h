@@ -17,6 +17,7 @@ public:
 	virtual ~Robot();
 	void speichern();
 	void ablauf();
+	void manuell();
 
 private:
 
