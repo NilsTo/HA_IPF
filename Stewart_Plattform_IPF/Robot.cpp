@@ -13,15 +13,20 @@ Robot::Robot(int pwmpin[6], int analogpin[6], int flat[6], int up[6],
 		ra[i].wiSP[anzahlSP];
 		ra[i].aktor.setPins(analogpin[i], pwmpin[i]);
 		ra[i].aktor.setAngles(flat[i], up[i]);
-		ra[i].aktor.attach();
-		ra[i].aktor.setAnalogLimits();
-		ra[i].aktor.detach();
 	}
 	_anzSP = 0;
 }
 
 Robot::~Robot() {
 	// TODO Auto-generated destructor stub
+}
+
+void Robot::kalibrieren(){
+	for (int i = 0;i<6;i++){
+		ra[i].aktor.attach();
+		ra[i].aktor.setAnalogLimits();
+		ra[i].aktor.detach();
+	}
 }
 
 void Robot::speichern() {

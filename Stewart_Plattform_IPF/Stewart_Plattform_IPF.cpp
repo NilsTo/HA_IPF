@@ -5,6 +5,7 @@
 #include "Joystick.h"
 #include "Vector.h"
 #include "LiquidCrystal.h"
+#include "Robot.h"
 //-----------------------------------------
 
 //------------- Pin u. Wert Definitionen ------------------------
@@ -48,7 +49,7 @@ float baseWi[6] = { 176.9176, 123.0772, 56.9228, 3.0772, 296.9228, 243.0772 };
 float topWi[6] = { 156.2695, 143.7305, 36.2695, 23.7305, 276.2694, 263.7305 };
 float baseR = 86.6870;
 float topR = 64.1185;
-//Geometrische Details deines Arms.
+//Geometrische Details eines Arms.
 float laengeOberarm = 40.0;
 float laengeUnterarm = 138.0;
 //Iterativ berechnete Mittelposition - dann gilt z-Achse +-28mmm rollAngle +-25° pitchAngle +-27° yawAngle +-50 -- Kombinationen geringer
@@ -95,6 +96,8 @@ Hexapod stewart(laengeOberarm, laengeUnterarm, defaultHeight, baseR, topR,
 Joystick bediener(XMIN, XMAX, YMIN, YMAX, XAXPIN, YAXPIN);
 
 LiquidCrystal LCD(RS, ENABLE, D4, D5, D6, D7);
+
+Robot roboter(pwmpin, analogpin, flat, upright, 10);
 //-----------------------------------------------------------------
 
 //-------- SETUP --------------------------------------------------
@@ -165,12 +168,12 @@ void loop() {
 		}
 		stewart.verfahren(0.0, 0.0, 0.0, 0.0, xwert, ywert);
 		/*
-		LCD.clear();
-		LCD.setCursor(0, 0);
-		LCD.print(xwert);
-		LCD.setCursor(0, 1);
-		LCD.print(ywert);
-		*/
+		 LCD.clear();
+		 LCD.setCursor(0, 0);
+		 LCD.print(xwert);
+		 LCD.setCursor(0, 1);
+		 LCD.print(ywert);
+		 */
 		if (digitalRead(T5PIN) == LOW) {
 			mod3 = false;
 			menu = true;
@@ -213,6 +216,26 @@ void loop() {
 			mod2 = false;
 		}
 	}
-	// TODO Implement ROBOT
+	if (mod3 && !menu) {
+		if (!erstellt) {
+			roboter.kalibrieren();
+			erstellt = true;
+		}
+		if (digitalRead(T1PIN) == LOW && mod3) {
+			roboter.speichern();
+		}
+		if (digitalRead(T2PIN) == LOW && mod3) {
+			roboter.ablauf();
+			roboter.manuell();
+		}
+		if (digitalRead(T5PIN) == LOW) {
+			mod3 = false;
+			menu = true;
+			mod1 = false;
+			mod2 = false;
+			erstellt = false;
+		}
+		// TODO LCD einbinden.
+	}
 }
 //-----------------------------------------------------
