@@ -18,6 +18,7 @@ public:
 	void speichern();
 	void ablauf();
 	void manuell();
+	void kalibrieren();
 
 private:
 
