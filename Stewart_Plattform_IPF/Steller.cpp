@@ -55,6 +55,8 @@ void Steller::setAnalogLimits() {
 	this->stelle(87);
 	delay(500);
 	this->_maxAn = analogRead(_analogPin);
+	this->stelle(36);
+	delay(200);
 }
 
 /**
