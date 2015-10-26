@@ -49,7 +49,7 @@ float baseWi[6] = { 176.9176, 123.0772, 56.9228, 3.0772, 296.9228, 243.0772 };
 float topWi[6] = { 156.2695, 143.7305, 36.2695, 23.7305, 276.2694, 263.7305 };
 float baseR = 86.6870;
 float topR = 64.1185;
-//Geometrische Details deines Arms.
+//Geometrische Details eines Arms.
 float laengeOberarm = 40.0;
 float laengeUnterarm = 138.0;
 //Iterativ berechnete Mittelposition - dann gilt z-Achse +-28mmm rollAngle +-25° pitchAngle +-27° yawAngle +-50 -- Kombinationen geringer
