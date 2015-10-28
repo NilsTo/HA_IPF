@@ -24,7 +24,15 @@ Robot::~Robot() {
 void Robot::kalibrieren(){
 	for (int i = 0;i<6;i++){
 		ra[i].aktor.attach();
-		ra[i].aktor.setAnalogLimits();
+		ra[i].aktor.stelle(3); //TODO andere Werte
+		delay(500);
+		int minAn = analogRead(ra[i].aktor.getAnalogPin());
+		ra[i].aktor.stelle(87); //TODO andere Werte
+		delay(500);
+		int maxAn = analogRead(ra[i].aktor.getAnalogPin());
+		ra[i].aktor.setAnalogLimits(minAn,maxAn);
+		ra[i].aktor.stelle(36);
+		delay(500);
 		ra[i].aktor.detach();
 	}
 }
@@ -33,9 +41,10 @@ void Robot::speichern() {
 	for (int i = 0; i < 6; i++) {
 		ra[i].wiSP[_anzSP] = ra[i].aktor.getAnalogAngle();
 	}
+	Serial.println("Gespeichert");
 	_anzSP++;
 	if (_anzSP > 9)
-		_anzSP = 0;  //Unsauber - aber .lenght funktioniert n. richtig
+		_anzSP = 0;  //Unsauber - aber .lenght gibt nur bytes die vorhanden sind zurück
 }
 
 void Robot::manuell(){

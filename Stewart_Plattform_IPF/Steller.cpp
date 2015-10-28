@@ -46,17 +46,12 @@ void Steller::setPins(int analogPin, int pwmPin) {
  *
  *  Wird im Zusammenhang mit Auslesen der Potis notwendig.
  */
-void Steller::setAnalogLimits() {
+void Steller::setAnalogLimits(int minAn, int maxAn) {
 	// Poti-Wert bei waagerechter Position
-	this->stelle(3);
-	delay(500);
-	this->_minAn = analogRead(_analogPin);
+	this->_minAn = minAn;
 	// Poti-Wert bei senkrechter Position
-	this->stelle(87);
-	delay(500);
-	this->_maxAn = analogRead(_analogPin);
-	this->stelle(36);
-	delay(200);
+	this->_maxAn = maxAn;
+
 }
 
 /**
@@ -92,7 +87,7 @@ void Steller::attach() {
 		 *
 		 */
 
-		this->stelle(90);
+		this->stelle(36);
 		delay(500);
 		this->Servo::attach(_pwmPin);
 
@@ -143,5 +138,9 @@ int Steller::getAnalogAngle() {
  */
 
 int Steller::getLastAngle() {
-	return _lastAngle;
+	return this->_lastAngle;
+}
+
+int Steller::getAnalogPin(){
+	return this->_analogPin;
 }

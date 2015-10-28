@@ -25,9 +25,10 @@ public:
 	bool aktiv();
 	void setAngles(int flat, int upright);
 	void setPins(int analogPin, int pwmPin);
+	void setAnalogLimits(int,int);
+	int getAnalogPin();
 private:
 	int _upright, _flat, _analogPin, _pwmPin, _minAn, _maxAn, _lastAngle;
-	void setAnalogLimits();
 	boolean _pinSet, _angleSet;
 };
 
