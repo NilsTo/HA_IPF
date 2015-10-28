@@ -28,10 +28,10 @@ int analogpin[6] = { 2, 4, 5, 0, 1, 3 };
 #define YMAX 766
 //---- Taster ------
 #define T1PIN 22
-#define T2Pin 23
+#define T2PIN 23
 #define T3PIN 24
 #define T4PIN 25
-#define T5Pin 26
+#define T5PIN 26
 //---- Lagesensor --
 #define XACCPIN 15
 #define YACCPIN 14
@@ -81,6 +81,9 @@ float iz;
 float lastIX;
 float lastIY;
 float lastIZ;
+float latestIX;
+float latestIY;
+float latestIZ;
 float readx;
 float ready;
 float readz;
@@ -91,8 +94,10 @@ bool erstellt = false;
 //-------------------------
 
 //--------- Initialisierung der Teile -----------------------------
+
 Hexapod stewart(laengeOberarm, laengeUnterarm, defaultHeight, baseR, topR,
 		baseWi, topWi, beta, pwmpin, analogpin, flat, upright);
+
 Joystick bediener(XMIN, XMAX, YMIN, YMAX, XAXPIN, YAXPIN);
 
 LiquidCrystal LCD(RS, ENABLE, D4, D5, D6, D7);
@@ -122,34 +127,40 @@ void loop() {
 		LCD.print("T1:Joystick");
 		LCD.setCursor(0, 1);
 		LCD.print("T2:Lagesensor");
-		delay(500);
+		delay(800);
+		/*
 		LCD.clear();
 		LCD.setCursor(0, 0);
 		LCD.print("T3:Roboter");
+		*/
+		delay(800);
 		if (digitalRead(T1PIN) == LOW) {
 			mod1 = true;
 			menu = false;
 			mod2 = false;
 			mod3 = false;
+			delay(500);
 		}
 		if (digitalRead(T2PIN) == LOW) {
 			mod2 = true;
 			menu = false;
 			mod1 = false;
 			mod3 = false;
+			delay(500);
 		}
 		if (digitalRead(T3PIN) == LOW) {
 			mod3 = true;
 			menu = false;
 			mod1 = false;
 			mod2 = false;
+			delay(500);
 		}
 	}
 //----- Joystick Modus ---------------------------------
 	if (mod1 && !menu) {
 		LCD.clear();
 		LCD.setCursor(0, 0);
-		LCD.print("JoxstickModus");
+		LCD.print("JoystickModus");
 		ziel = bediener.bewegung(1);
 		xwert = xwert + (ziel.x);
 		Serial.println(xwert);
@@ -167,29 +178,28 @@ void loop() {
 			ywert = 0;
 		}
 		stewart.verfahren(0.0, 0.0, 0.0, 0.0, xwert, ywert);
-		/*
-		 LCD.clear();
-		 LCD.setCursor(0, 0);
-		 LCD.print(xwert);
-		 LCD.setCursor(0, 1);
-		 LCD.print(ywert);
-		 */
 		if (digitalRead(T5PIN) == LOW) {
 			mod3 = false;
 			menu = true;
 			mod1 = false;
 			mod2 = false;
+			delay(500);
 		}
 	}
 //------- Lagesensor ------------------------------------
 	if (mod2 && !menu) {
+
 		readx = (analogRead(XACCPIN) - BIAS) / FAKTOR;
 		ready = (analogRead(YACCPIN) - BIAS) / FAKTOR;
 		readz = (analogRead(ZACCPIN) - BIAS) / FAKTOR;
 
-		ix = 0.3 * readx + 0.7 * lastIX;
-		iy = 0.3 * ready + 0.7 * lastIY;
-		iz = 0.3 * readz + 0.7 * lastIZ;
+		ix = 0.1 * readx + 0.6 * lastIX + 0.3 * latestIX;
+		iy = 0.1 * ready + 0.6 * lastIY + 0.3 * latestIY;
+		iz = 0.1 * readz + 0.6 * lastIZ + 0.3 * latestIZ;
+
+		latestIX = lastIX;
+		latestIY = lastIY;
+		latestIZ = lastIZ;
 
 		lastIX = ix;
 		lastIY = iy;
@@ -208,34 +218,58 @@ void loop() {
 		if (abs(rollAng) < 2.5)
 			rollAng = 0.0;
 		stewart.verfahren(0.0, 0.0, 0.0, 0.0, pitchAng, -rollAng);
-		delay(100);
+		delay(2);
 		if (digitalRead(T5PIN) == LOW) {
 			mod3 = false;
 			menu = true;
 			mod1 = false;
 			mod2 = false;
+			delay(500);
 		}
 	}
-	if (mod3 && !menu) {
+//------- Roboter ------------------------------------------- // Siehe Doku - Benoetigt weitere Arbeit
+/*
+ 	 if (mod3 && !menu) {
 		if (!erstellt) {
+			LCD.clear();
+			LCD.setCursor(0,0);
+			LCD.print("Kalibrieren");
+			roboter.manuell();
 			roboter.kalibrieren();
 			erstellt = true;
+			LCD.clear();
 		}
 		if (digitalRead(T1PIN) == LOW && mod3) {
 			roboter.speichern();
+			LCD.clear();
+			LCD.setCursor(0,0);
+			LCD.print("Gespeichert");
+			delay(800);
+			LCD.clear();
 		}
 		if (digitalRead(T2PIN) == LOW && mod3) {
+			LCD.clear();
+			LCD.setCursor(0,0);
+			LCD.print("Ablauf");
 			roboter.ablauf();
 			roboter.manuell();
+			LCD.clear();
+			delay(500);
 		}
+		LCD.setCursor(0,0);
+		LCD.print("T1:SpeicherPos");
+		LCD.setCursor(0,1);
+		LCD.print("T2:Ablauf start");
 		if (digitalRead(T5PIN) == LOW) {
 			mod3 = false;
 			menu = true;
 			mod1 = false;
 			mod2 = false;
 			erstellt = false;
+			delay(500);
 		}
 		// TODO LCD einbinden.
 	}
+*/
 }
 //-----------------------------------------------------
