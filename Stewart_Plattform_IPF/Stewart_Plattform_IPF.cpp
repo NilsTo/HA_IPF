@@ -78,12 +78,12 @@ Vector ziel;
 float ix;
 float iy;
 float iz;
-float lastIX;
-float lastIY;
-float lastIZ;
-float latestIX;
-float latestIY;
-float latestIZ;
+float juniorIX;
+float juniorIY;
+float juniorIZ;
+float seniorIX;
+float seniorIY;
+float seniorIZ;
 float readx;
 float ready;
 float readz;
@@ -193,17 +193,17 @@ void loop() {
 		ready = (analogRead(YACCPIN) - BIAS) / FAKTOR;
 		readz = (analogRead(ZACCPIN) - BIAS) / FAKTOR;
 
-		ix = 0.1 * readx + 0.6 * lastIX + 0.3 * latestIX;
-		iy = 0.1 * ready + 0.6 * lastIY + 0.3 * latestIY;
-		iz = 0.1 * readz + 0.6 * lastIZ + 0.3 * latestIZ;
+		ix = 0.1 * readx + 0.6 * juniorIX + 0.3 * seniorIX;
+		iy = 0.1 * ready + 0.6 * juniorIY + 0.3 * seniorIY;
+		iz = 0.1 * readz + 0.6 * juniorIZ + 0.3 * seniorIZ;
 
-		latestIX = lastIX;
-		latestIY = lastIY;
-		latestIZ = lastIZ;
+		seniorIX = juniorIX;
+		seniorIY = juniorIY;
+		seniorIZ = juniorIZ;
 
-		lastIX = ix;
-		lastIY = iy;
-		lastIZ = iz;
+		juniorIX = ix;
+		juniorIY = iy;
+		juniorIZ = iz;
 
 		LCD.clear();
 		LCD.setCursor(0, 0);
