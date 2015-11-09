@@ -18,14 +18,9 @@ public:
 	Hexapod(float LOA, float LUA,float dhoehe, float baseR, float topR, float basewi[6],
 			float topwi[6], float winkel[6], int pwm[6], int analog[6],
 			int waagerecht[6], int senkrecht[6]);
-
 	virtual ~Hexapod();
-
 	void goHome();
-
 	bool verfahren(float, float, float, float, float, float);
-
-	float calcHomeWinkel(int);
 
 private:
 
