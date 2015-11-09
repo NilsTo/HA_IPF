@@ -11,7 +11,7 @@ Hexapod::Hexapod(float LOA, float LUA, float dhoehe, float baseR, float topR,
 		int analog[6], int waagerecht[6], int senkrecht[6]) {
 	//Geometrie der a definieren
 	for (int i = 0; i < 6; i++) {
-		//Armlängen definieren
+		//ArmlÃ¤ngen definieren
 		a[i].LaengeOberarm = LOA;
 		a[i].LaengeUnterarm = LUA;
 		//Oberen Anker definieren
@@ -38,7 +38,7 @@ Hexapod::~Hexapod() {
 	// TODO Auto-generated destructor stub
 }
 /*
- * Fährt den Hexapod in seine Ausgangsposition. UNSAUBER!!
+ * FÃ¤hrt den Hexapod in seine Ausgangsposition. UNSAUBER!!
  */
 void Hexapod::goHome() {
 	for (int i = 0; i < 6; i++) {
@@ -61,23 +61,9 @@ Vector Hexapod::calcRotMatrix(Vector b, float yaw, float pitch, float roll) {
 			+ cos(pitch) * cos(roll) * b.z;
 	return c;
 }
-// Wird eher nicht benötigt!
-float Hexapod::calcHomeWinkel(int winkel) {
-	float xOxU = (a[winkel].topVec.x - a[winkel].baseVec.x);
-	float yOyU = (a[winkel].topVec.y - a[winkel].baseVec.y);
-	float h0 = sqrt(
-			(a[winkel].LaengeUnterarm * a[winkel].LaengeUnterarm)
-					+ (a[winkel].LaengeOberarm * a[winkel].LaengeOberarm)
-					- (xOxU * xOxU) - (yOyU * yOyU)) - a[winkel].topVec.z;
-	float L0 = 2 * a[winkel].LaengeOberarm * a[winkel].LaengeOberarm;
-	float M0 = 2 * a[winkel].LaengeOberarm * xOxU;
-	float N0 = 2 * a[winkel].LaengeOberarm * (h0 + a[winkel].topVec.z);
-	float a0 = (asin(L0 / sqrt(M0 * M0 + N0 * N0)) - atan2(M0, N0)) * RAD_TO_DEG;
-	return a0;
-}
 
 /*
- * Ermöglicht das Verfahren der oberen Plattform in anzugebene kartesische Koordinaten und die dazugehörigen Eulerwinkel
+ * ErmÃ¶glicht das Verfahren der oberen Plattform in anzugebene kartesische Koordinaten und die dazugehÃ¶rigen Eulerwinkel
  */
 bool Hexapod::verfahren(float xx, float yy, float zz, float yawAngle,
 		float pitchAngle, float rollAngle) {
@@ -97,14 +83,14 @@ bool Hexapod::verfahren(float xx, float yy, float zz, float yawAngle,
 		Vector q = ziel + matrixErgebnis + dheight;
 		Vector l = q - a[i].baseVec;
 		a[i].dynLaenge = l.Length();
-		//Winkel - Hilfsgrößen
+		//Winkel - HilfsgrÃ¶ÃŸen
 		float L = (a[i].dynLaenge * a[i].dynLaenge)
 				- (a[i].LaengeUnterarm * a[i].LaengeUnterarm)
 				+ (a[i].LaengeOberarm * a[i].LaengeOberarm);
-		float M = 2 * a[i].LaengeOberarm * (q.z - a[i].baseVec.z);   //Änderung
+		float M = 2 * a[i].LaengeOberarm * (q.z - a[i].baseVec.z);   //Ã„nderung
 		float N = 2 * a[i].LaengeOberarm
-				* (cos(a[i].beta) * (q.x - a[i].baseVec.x) //Änderung
-				+ sin(a[i].beta) * (q.y - a[i].baseVec.y)); //Änderung
+				* (cos(a[i].beta) * (q.x - a[i].baseVec.x) //Ã„nderung
+				+ sin(a[i].beta) * (q.y - a[i].baseVec.y)); //Ã„nderung
 		//Berechnen des Winkels
 		a[i].dynWinkel = (asin(L / sqrt(M * M + N * N)) - atan(N / M))
 				* RAD_TO_DEG;
@@ -126,7 +112,7 @@ bool Hexapod::verfahren(float xx, float yy, float zz, float yawAngle,
 		deltaWi = a[i].aktor.stelle(stellWinkel);
 		if (deltaWi > deltaWiMax) deltaWiMax = deltaWi;
 	}
-	//Berechnung der max. Zeit für physisches verfahren eines Aktors
+	//Berechnung der max. Zeit fÃ¼r physisches verfahren eines Aktors
 	pause = int((deltaWiMax / speed));
 	delay(pause);
 	return true;
