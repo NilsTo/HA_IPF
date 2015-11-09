@@ -7,9 +7,6 @@
 #ifndef HEXAPOD_H_
 #define HEXAPOD_H_
 
-#define DEG2RAD      (PI/180.0f)
-#define RAD2DEG      (180.0f/PI)
-
 #include "Arduino.h"
 #include "Vector.h"
 #include "Steller.h"
@@ -54,7 +51,7 @@ private:
 
 	Vector calcRotMatrix(Vector, float, float, float);
 	/*
-	 * Funktion, die den Normalwinkel berechnet, benötigt als int, bei welchem Servo beta=0
+	 * Funktion, die den Normalwinkel berechnet, benÃ¶tigt als int, bei welchem Servo beta=0
 	 */
 
 };
