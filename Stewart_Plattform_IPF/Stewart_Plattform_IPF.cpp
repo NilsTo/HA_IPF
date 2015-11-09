@@ -1,4 +1,4 @@
-//------ Inclusions -----------------------
+//------ Inkludieren der anderen Klassenheader -----
 #include "Stewart_Plattform_IPF.h"
 #include "Hexapod.h"
 #include "Arduino.h"
@@ -6,7 +6,7 @@
 #include "Vector.h"
 #include "LiquidCrystal.h"
 #include "Robot.h"
-//-----------------------------------------
+//--------------------------------------------------
 
 //------------- Pin u. Wert Definitionen ------------------------
 //---- LCD ---------
@@ -52,10 +52,12 @@ float topR = 64.1185;
 //Geometrische Details eines Arms.
 float laengeOberarm = 40.0;
 float laengeUnterarm = 138.0;
-//Iterativ berechnete Mittelposition - dann gilt z-Achse +-28mmm rollAngle +-25° pitchAngle +-27° yawAngle +-50 -- Kombinationen geringer
+//Iterativ berechnete Mittelposition - dann gilt z-Achse +-28mmm rollAngle +-25Â° pitchAngle +-27Â° yawAngle +-50 -- Kombinationen geringer
 float defaultHeight = 145.0;
+//Maximal moegliche Neigung (fuer Joystick-Betrieb, falls unterschiedlich ist die kleinste einzutragen)
+int maxAngle = 20;
 /*
- * Details der Servos. Beta beschreibt den eingezeichneten Winkel zwischen Oberarmfläche und X-Achse
+ * Details der Servos. Beta beschreibt den eingezeichneten Winkel zwischen OberarmflÃ¤che und X-Achse
  * des lokalen KKS des Baseplates.(siehe mathematische Herleitung)
  * Flat u. Upright sind die Winkel der Servos bei waagerechter u. senkrechter Stellung.
  */
@@ -165,14 +167,15 @@ void loop() {
 		xwert = xwert + (ziel.x);
 		Serial.println(xwert);
 		ywert = ywert + (ziel.y);
-		if (xwert > 20)
-			xwert = 20;
-		if (xwert < -20)
-			xwert = -20;
-		if (ywert > 20)
-			ywert = 20;
-		if (ywert < -20)
-			ywert = -20;
+		// Joystick-Ziel bei verlassen des moeglichen Neigungsbereiches "fangen"
+		if (xwert > maxAngle)
+			xwert = maxAngle;
+		if (xwert < -1*maxAngle)
+			xwert = -1*maxAngle;
+		if (ywert > maxAngle)
+			ywert = maxAngle;
+		if (ywert < -1*maxAngle)
+			ywert = -1*maxAngle;
 		if (bediener.klick()) {
 			xwert = 0;
 			ywert = 0;
@@ -197,10 +200,12 @@ void loop() {
 		iy = 0.1 * ready + 0.6 * juniorIY + 0.3 * seniorIY;
 		iz = 0.1 * readz + 0.6 * juniorIZ + 0.3 * seniorIZ;
 
+		// Junioren werden eine Generation aelter
 		seniorIX = juniorIX;
 		seniorIY = juniorIY;
 		seniorIZ = juniorIZ;
 
+		// Neue Junioren werden uebernommen
 		juniorIX = ix;
 		juniorIY = iy;
 		juniorIZ = iz;
@@ -211,8 +216,13 @@ void loop() {
 		LCD.setCursor(0, 1);
 		LCD.print(readz);
 
+		// Trigonometrie uebernommen von http://physics.rutgers.edu/~aatish/teach/srr/workshop3.pdf
 		pitchAng = RAD_TO_DEG * atan(ix / sqrt(pow(iy, 2) + pow(iz, 2)));
 		rollAng = RAD_TO_DEG * atan(iy / sqrt(pow(ix, 2) + pow(iz, 2)));
+		// Ende uebernommen
+		
+		// Wenn Lage-Winkel kleiner als 2.5 Grad -> ignorieren, um Zittern in waagerechter
+		// Lage zu verhindern
 		if (abs(pitchAng) < 2.5)
 			pitchAng = 0.0;
 		if (abs(rollAng) < 2.5)
