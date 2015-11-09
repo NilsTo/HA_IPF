@@ -7,9 +7,6 @@
 #ifndef HEXAPOD_H_
 #define HEXAPOD_H_
 
-#define DEG2RAD      (PI/180.0f)
-#define RAD2DEG      (180.0f/PI)
-
 #include "Arduino.h"
 #include "Vector.h"
 #include "Steller.h"
@@ -21,14 +18,9 @@ public:
 	Hexapod(float LOA, float LUA,float dhoehe, float baseR, float topR, float basewi[6],
 			float topwi[6], float winkel[6], int pwm[6], int analog[6],
 			int waagerecht[6], int senkrecht[6]);
-
 	virtual ~Hexapod();
-
 	void goHome();
-
 	bool verfahren(float, float, float, float, float, float);
-
-	float calcHomeWinkel(int);
 
 private:
 
@@ -54,7 +46,7 @@ private:
 
 	Vector calcRotMatrix(Vector, float, float, float);
 	/*
-	 * Funktion, die den Normalwinkel berechnet, benötigt als int, bei welchem Servo beta=0
+	 * Funktion, die den Normalwinkel berechnet, benÃ¶tigt als int, bei welchem Servo beta=0
 	 */
 
 };

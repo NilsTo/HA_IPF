@@ -1,5 +1,7 @@
-/*
+//*
  * Robot.cpp
+ * Bisher in sehr grundlegendem Status verblieben. Kommt nicht zur erfolgreichen
+ * Anwendung (zur Problematik siehe Doku).
  *
  *  Created on: 25.10.2015
  *      Author: Nils
@@ -41,10 +43,10 @@ void Robot::speichern() {
 	for (int i = 0; i < 6; i++) {
 		ra[i].wiSP[_anzSP] = ra[i].aktor.getAnalogAngle();
 	}
-	Serial.println("Gespeichert");
+	Serial.println("Gespeichert"); // TODO Umstellung auf LCD
 	_anzSP++;
 	if (_anzSP > 9)
-		_anzSP = 0;  //Unsauber - aber .lenght gibt nur bytes die vorhanden sind zurück
+		_anzSP = 0;  // Unsauber - aber .lenght gibt nur bytes die vorhanden sind zurÃ¼ck
 }
 
 void Robot::manuell(){

@@ -8,8 +8,8 @@
 #include "Steller.h"
 /**
  *  Erstellt neuen Steller, eine Subklasse von Servo.
- *  Es müssen mindestens Informationen über die PIN-Belegung und
- *  die zu den Winkel gehörenden Servo.h-Winkel angegeben werden.
+ *  Es mÃ¼ssen mindestens Informationen Ã¼ber die PIN-Belegung und
+ *  die zu den Winkel gehÃ¶renden Servo.h-Winkel angegeben werden.
  */
 Steller::Steller() {
 }
@@ -17,7 +17,7 @@ Steller::Steller() {
 Steller::~Steller() {
 	// Detach Servo if not in use anymore.
 	if (this->attached())
-		this->detach();
+		this->Servo::detach();
 }
 /**
  * int flat, int upright sind die Grenzen,
@@ -41,7 +41,7 @@ void Steller::setPins(int analogPin, int pwmPin) {
 
 /**
  *  Private Methode zum Ermitteln der Limits.
- *  Ein Aufrufen dürfte nur durch eine Initialisierungsmethode
+ *  Ein Aufrufen dÃ¼rfte nur durch eine Initialisierungsmethode
  *  laufen, wenn es also nicht stoert o.ae.
  *
  *  Wird im Zusammenhang mit Auslesen der Potis notwendig.
@@ -56,24 +56,24 @@ void Steller::setAnalogLimits(int minAn, int maxAn) {
 
 /**
  *  Beginnt das Schreiben eines PWM-Signals auf Servo-PWM-Pin.
- *  Wird vorher auf 90° gesetzt
  */
 void Steller::attach() {
 	// Anschluss des Servos ist nur nach Definition der
-	// Steller-Eigenschaften (zwei Winkel, zwei Pins) zulässig
+	// Steller-Eigenschaften (zwei Winkel, zwei Pins) zulÃ¤ssig
 	if (_angleSet && _pinSet) {
 
 		/*
 		 * optional: in senkrechte Position fahren
 		 * Delay wird zwischen den einzelnen Servos abgewartet.
-		 * wenn das Verhalten als gewünscht angesehen wird,
+		 * wenn das Verhalten als gewÃ¼nscht angesehen wird,
 		 * ist eine Organisation & ein gemeinsamer delay aller
-		 * Servos durch die übergeordnete Methode notwendig.
+		 * Servos durch die Ã¼bergeordnete Methode notwendig.
 		 *
 		 *
-		 * Es ist möglich, ein initiales Schreiben auf den Servo zu unterdrücken:
+		 * Es wÃ¤re mÃ¶glich, ein initiales Schreiben auf den Servo zu unterdrÃ¼cken:
 		 *
 		 * Quelle: (http://stackoverflow.com/questions/26695670/attach-arduino-servo-without-moving)
+		 * // ANFANG ZITAT
 		 *
 		 * Thanks to djUniversal's answer, I got it working so that the servo doesn't move when attached.
 		 * In case anyone else is looking to do the same, all I did was go into ServoTimer2.cpp and comment
@@ -85,21 +85,25 @@ void Steller::attach() {
 		 *        writeChan(i, DEFAULT_PULSE_WIDTH);  // store default values
 		 *    }
 		 *
+		 * // ENDE ZITAT
+		 *
+		 * Von der Verwendung der vorgestellten Methode wurde abgesehen, da dies in den Augen des Autors
+		 * nicht notwendig ist. Stattdessen fahren die sechs Servos zu Beginn nacheinander (bei attach())
+		 * an eine Initialposition.
 		 */
 
 		this->stelle(36);
+		// Verzoegerung, da aktuelle Position nicht bekannt ist und auch im
+		// nicht definierten Bereich liegen kann.
 		delay(500);
 		this->Servo::attach(_pwmPin);
 
 	}
 }
 
-void Steller::detach() {
-	this->Servo::detach();
-}
-
 /**
- *  Vereinfacht das Einstellen eines Winkels am Servo
+ *  Vereinfacht das Einstellen eines Winkels am Servo, gibt als Bestaetigung
+ *  die Winkelaenderung zurueck.
  */
 int Steller::stelle(int angle) {
 	int deltaAngle;
@@ -112,7 +116,7 @@ int Steller::stelle(int angle) {
 		return deltaAngle;
 	} else {
 		Serial.println(
-				"Angle input error. Steller::stelle did not recieve a correct angle.");
+				"Der eingestellte Winkel liegt nicht im definierten Bereich.");
 		return 90;
 	}
 }
@@ -127,7 +131,7 @@ int Steller::getAnalogAngle() {
 		return angle;
 	} else {
 		Serial.println(
-				"Limits are not known yet. Steller::setAnalogLimits() may be a good idea.");
+				"Die Grenzwinkel sind nicht bekannt. Setze diese mit Steller::setAnalogLimits().");
 		return 1023;
 	}
 }
