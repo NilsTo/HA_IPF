@@ -1,5 +1,5 @@
-//*
- * Robot.cpp
+/*
+ *  * Robot.cpp
  * Bisher in sehr grundlegendem Status verblieben. Kommt nicht zur erfolgreichen
  * Anwendung (zur Problematik siehe Doku).
  *

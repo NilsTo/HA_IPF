@@ -6,7 +6,7 @@
  */
 
 #include "Steller.h"
-/**
+/*
  *  Erstellt neuen Steller, eine Subklasse von Servo.
  *  Es müssen mindestens Informationen über die PIN-Belegung und
  *  die zu den Winkel gehörenden Servo.h-Winkel angegeben werden.
@@ -19,7 +19,7 @@ Steller::~Steller() {
 	if (this->attached())
 		this->Servo::detach();
 }
-/**
+/*
  * int flat, int upright sind die Grenzen,
  * die im Projekt angefahren werden duerfen
  */
@@ -29,7 +29,7 @@ void Steller::setAngles(int flat, int upright) {
 	this->_angleSet = true;
 }
 
-/**
+/*
  *  Setter f. anzusteuernder PWM-Pin und
  *  auszulesender analog-Pin
  */
@@ -39,7 +39,7 @@ void Steller::setPins(int analogPin, int pwmPin) {
 	this->_pinSet = true;
 }
 
-/**
+/*
  *  Private Methode zum Ermitteln der Limits.
  *  Ein Aufrufen dürfte nur durch eine Initialisierungsmethode
  *  laufen, wenn es also nicht stoert o.ae.
@@ -54,7 +54,7 @@ void Steller::setAnalogLimits(int minAn, int maxAn) {
 
 }
 
-/**
+/*
  *  Beginnt das Schreiben eines PWM-Signals auf Servo-PWM-Pin.
  */
 void Steller::attach() {
@@ -101,7 +101,7 @@ void Steller::attach() {
 	}
 }
 
-/**
+/*
  *  Vereinfacht das Einstellen eines Winkels am Servo, gibt als Bestaetigung
  *  die Winkelaenderung zurueck.
  */
@@ -121,7 +121,7 @@ int Steller::stelle(int angle) {
 	}
 }
 
-/**
+/*
  *  Gibt den aufgrund der Potentiometer-Spannung ermittelten Winkel des Servohorns zurueck.
  *  Sollten die Grenzen noch nicht gesetzt sein, gibt sie 1023 zurueck.
  */
@@ -136,7 +136,7 @@ int Steller::getAnalogAngle() {
 	}
 }
 
-/**
+/*
  * gibt zuletzt geschriebenen Wert (ohne Mapping) zurueck,
  * der am Ende von ::stelle jeweils in das Objekt geschrieben wird.
  */
