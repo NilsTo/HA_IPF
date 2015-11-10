@@ -8,8 +8,8 @@
 #ifndef STELLER_H_
 #define STELLER_H_
 
-#include <Arduino.h>
-#include <Servo.h>
+#include "Arduino.h"
+#include "Servo.h"
 
 #define speed 0.2727272727f   //Geschwindigkeit eines Servos in [Grad/ms]
 
